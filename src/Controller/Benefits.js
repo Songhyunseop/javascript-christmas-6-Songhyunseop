@@ -31,6 +31,10 @@ class Promotion {
     const isGift = this.event.hasFreeMenu(totalPaid); // 증정여부
     OutputView.printThis('<증정 메뉴>');
     console.log(`${MENU.FREE_OPTION[Math.abs(isGift.result)]}`);
+
+    const BenefitsDetail = this.event.checkBenefitList(isGift);
+    OutputView.printThis('<혜택 내역>');
+    OutputView.printThis(BenefitsDetail);
   }
 }
 

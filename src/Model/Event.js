@@ -43,6 +43,32 @@ class Event {
     if (total > 120000) return { name: '증정 이벤트', result: -25000 };
     return { name: '증정 이벤트', result: 0 };
   }
+
+  // 혜택 내역 반환 (아직테스트 작성안함)
+  checkBenefitList(isGift) {
+    const discountMethods = [
+      this.christMasDay.bind(this),
+      this.everyDay.bind(this),
+      this.specialDay.bind(this),
+      () => isGift,
+    ];
+
+    // if (isGift) discountMethods.push(() => isGift);
+    const details = this.#getDiscountMethodResults(discountMethods);
+
+    return details;
+  }
+
+  // 할인 적용 내역 filter
+  #getDiscountMethodResults(Methods) {
+    const result = Methods.filter((method) => {
+      const info = method();
+
+      return info.result !== 0;
+    }).map((method) => method());
+
+    return result;
+  }
 }
 
 export default Event;

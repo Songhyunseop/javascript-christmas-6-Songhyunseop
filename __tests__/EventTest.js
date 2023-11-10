@@ -61,4 +61,29 @@ describe('Event 클래스 unit 테스트', () => {
     expect(isFree.name).toEqual(expect.stringContaining('증정 이벤트'));
     expect(isFree.result).toEqual(-25000);
   });
+
+  test('할인 및 증정품 목록이 포함된 전체 혜택 내역 반환', () => {
+    const isFree = { name: '증정 이벤트', result: -25000 };
+    const day = 25;
+    const courses = {
+      Appetizer: 0,
+      Main: 1,
+      Dessert: 1,
+      Drinks: 2,
+    };
+    const answer = [
+      { name: '크리스마스 디데이 할인', result: -3400 },
+      { name: '주말 할인', result: -2023 },
+      { name: '특별 할인', result: -1000 },
+      { name: '증정 이벤트', result: -25000 },
+    ];
+    const event = new Event(day, courses);
+    const result = event.checkBenefitList(isFree);
+
+    answer.forEach((el) => {
+      expect(result).toEqual(
+        expect.arrayContaining([expect.objectContaining(el)])
+      );
+    });
+  });
 });
