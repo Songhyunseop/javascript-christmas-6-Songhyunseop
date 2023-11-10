@@ -90,4 +90,16 @@ describe('Event 클래스 unit 테스트', () => {
       );
     });
   });
+
+  test.each([
+    [5000, '별'],
+    [15000, '트리'],
+    [25000, '산타'],
+  ])('각 혜택금액에 따라 뱃지 부여', (total, badge) => {
+    const event = new Event();
+
+    const result = event.awardBadge(total);
+
+    expect(result).toBe(badge);
+  });
 });

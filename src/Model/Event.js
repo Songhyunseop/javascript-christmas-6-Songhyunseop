@@ -69,6 +69,12 @@ class Event {
 
     return result;
   }
+
+  awardBadge(totalBenefits) {
+    if (totalBenefits >= 20000) return '산타';
+    if (totalBenefits >= 10000) return '트리';
+    return '별';
+  }
 }
 
 export default Event;
