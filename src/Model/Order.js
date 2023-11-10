@@ -1,4 +1,4 @@
-import MENU from '../Menu.js';
+import MENU from '../Constant/Menu.js';
 
 class Order {
   #total;

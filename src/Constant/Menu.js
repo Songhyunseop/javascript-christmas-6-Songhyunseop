@@ -17,7 +17,7 @@ const MENU = {
   CATEGORIES: Object.freeze([
     {
       name: 'Appetizer',
-      list: Object.freeze(['양송이수프', ' 타파스', '시저샐러드']),
+      list: Object.freeze(['양송이수프', '타파스', '시저샐러드']),
     },
     {
       name: 'Main',
@@ -37,6 +37,11 @@ const MENU = {
     Main: 0,
     Dessert: 0,
     Drinks: 0,
+  }),
+
+  FREE_OPTION: Object.freeze({
+    0: '없음',
+    25000: '샴페인 1개',
   }),
 };
 

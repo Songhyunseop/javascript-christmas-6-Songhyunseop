@@ -24,7 +24,7 @@ describe('Event 클래스 unit 테스트', () => {
       const event = new Event(day, orders);
       const result = event.everyDay();
 
-      expect(result).toEqual(6069);
+      expect(result).toEqual(-6069);
     });
 
     test('예약날짜가 주말인 경우 - Main 할인 적용', () => {
@@ -39,7 +39,16 @@ describe('Event 클래스 unit 테스트', () => {
       const event = new Event(day, orders);
       const result = event.everyDay();
 
-      expect(result).toEqual(10115);
+      expect(result).toEqual(-10115);
     });
+  });
+
+  test('예약날짜가 할인 날짜와 일치할 경우 특별할인 적용', () => {
+    const day = 3;
+
+    const event = new Event(day, null);
+    const result = event.specialDay();
+
+    expect(result).toEqual(-1000);
   });
 });

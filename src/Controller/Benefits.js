@@ -1,3 +1,4 @@
+import MENU from '../Constant/Menu.js';
 import Event from '../Model/Event.js';
 import Order from '../Model/Order.js';
 import InputView from '../View/InputView.js';
@@ -23,15 +24,22 @@ class Benefits {
     const courses = this.order.courseType(oredrMenus); // 각 주문 코스별로 분배한 결과 출력
 
     this.event = new Event(reserveDay, courses);
+
     this.event.checkAvailable(totalPaid);
 
-    this.event.chirstMasDay();
-    const aa = this.event.everyDay();
-    console.log(aa);
-    this.event.specialDay();
-    this.event.FreeMenu(totalPaid); // 증정여부
+    const event1 = this.event.chirstMasDay();
+    console.log(`크리스마스할인:${event1}`);
+    const event2 = this.event.everyDay();
+    console.log(`평일/주말 할인:${event1}`);
+    const event3 = this.event.specialDay();
+    console.log(`특별할인:${event1}`);
 
-    const result = this.event.everyDay();
+    const arr = [event1, event2, event3];
+
+    const isGift = this.event.hasFreeMenu(totalPaid); // 증정여부
+
+    if (isGift > 0) arr.push(isGift);
+    console.log(`증정품: ${MENU.FREE_OPTION[isGift]}`);
   }
 
   // aaa(name) {
