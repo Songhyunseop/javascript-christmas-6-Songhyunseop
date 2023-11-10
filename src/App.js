@@ -1,8 +1,8 @@
-import Benefits from './Controller/Benefits.js';
+import Promotion from './Controller/Benefits.js';
 
 class App {
   async run() {
-    await new Benefits().show();
+    await new Promotion().show();
   }
 }
 

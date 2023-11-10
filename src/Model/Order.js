@@ -42,12 +42,12 @@ class Order {
   courseType(menuInput) {
     const eachMenuAndCount = menuInput.split(',').map((el) => el.split('-'));
     const allMenu = eachMenuAndCount.flatMap(([menu, count]) =>
-      this.#generateOrderItems([menu, count])
+      this.#generateOrderedItems([menu, count])
     );
     return this.#countMenuCourses(allMenu);
   }
 
-  #generateOrderItems(menuAndCount) {
+  #generateOrderedItems(menuAndCount) {
     const [menu, count] = menuAndCount;
     const result = Array.from({ length: Number(count) }).map((_) => menu);
 

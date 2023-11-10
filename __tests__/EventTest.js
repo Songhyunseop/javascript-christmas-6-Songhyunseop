@@ -51,4 +51,14 @@ describe('Event 클래스 unit 테스트', () => {
 
     expect(result).toEqual(-1000);
   });
+
+  test('주문 금액 12만원 이상 시 증정품(샴페인) 증정', () => {
+    const totalPaid = 125000;
+
+    const event = new Event();
+    const isFree = event.hasFreeMenu(totalPaid);
+
+    expect(isFree.name).toEqual(expect.stringContaining('증정 이벤트'));
+    expect(isFree.result).toEqual(-25000);
+  });
 });
