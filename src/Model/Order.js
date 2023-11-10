@@ -21,10 +21,10 @@ class Order {
   totalAmount(menuInput) {
     const eachMenuAndCount = menuInput.split(',').map((el) => el.split('-'));
 
-    const result = eachMenuAndCount.reduce((total, menuItem) => {
-      const amount = this.#calculateTotalMenuAmount(menuItem);
-      return total + amount;
-    }, 0);
+    const result = eachMenuAndCount.reduce(
+      (total, menuItem) => total + this.#calculateTotalMenuAmount(menuItem),
+      0
+    );
 
     this.#total = result;
 
@@ -41,11 +41,30 @@ class Order {
   // 입력된 각 메뉴의 코스타입 반환
   courseType(menuInput) {
     const eachMenuAndCount = menuInput.split(',').map((el) => el.split('-'));
-    const allMenu = eachMenuAndCount.map((el) => el[0]);
+    const allMenu = eachMenuAndCount.flatMap(([menu, count]) =>
+      this.#generateOrderItems([menu, count])
+    );
 
-    const course = allMenu.map((menu) => this.#findCourseType(menu));
+    return this.#countMenuCourses(allMenu);
+  }
 
-    return course;
+  #generateOrderItems(menuAndCount) {
+    const [menu, count] = menuAndCount;
+    const result = Array.from({ length: Number(count) }).map((_) => menu);
+
+    return result;
+  }
+
+  #countMenuCourses(allMenu) {
+    const countResult = { ...MENU.COURSES_COUNT };
+
+    // eslint-disable-next-line array-callback-return
+    allMenu.map((menu) => {
+      const course = this.#findCourseType(menu);
+      countResult[course] += 1;
+    });
+
+    return countResult;
   }
 
   #findCourseType(menuName) {

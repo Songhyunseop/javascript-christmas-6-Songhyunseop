@@ -20,7 +20,7 @@ class Benefits {
     const totalPaid = this.order.totalAmount(oredrMenus);
     OutputView.printThis(totalPaid); // 총 주문금액 출력
 
-    const courses = this.order.courseType(oredrMenus);
+    const courses = this.order.courseType(orderedList);
 
     this.event = new Event(reserveDay);
     this.event.dayCheck();

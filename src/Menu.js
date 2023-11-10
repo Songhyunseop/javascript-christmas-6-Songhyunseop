@@ -31,6 +31,13 @@ const MENU = {
     { name: 'Dessert', list: Object.freeze(['초코케이크', '아이스크림']) },
     { name: 'Drinks', list: Object.freeze(['제로콜라', '레드와인', '샴페인']) },
   ]),
+
+  COURSES_COUNT: Object.freeze({
+    Appetizer: 0,
+    Main: 0,
+    Dessert: 0,
+    Drinks: 0,
+  }),
 };
 
 export default MENU;
