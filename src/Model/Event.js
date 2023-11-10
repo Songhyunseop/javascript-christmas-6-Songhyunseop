@@ -20,12 +20,12 @@ class Event {
   everyDay() {
     const dayOfWeek = new Date(`2023-12-${this.day}`).getDay();
 
-    if (dayOfWeek >= 5) {
-      const result = -(this.courses.Main * 2023);
+    if (dayOfWeek <= 5) {
+      const result = -(this.courses.Dessert * 2023);
       return { name: '평일 할인', result };
     }
 
-    const result = -(this.courses.Dessert * 2023);
+    const result = -(this.courses.Main * 2023);
     return { name: '주말 할인', result };
   }
 

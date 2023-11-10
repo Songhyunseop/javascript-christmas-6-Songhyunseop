@@ -1,4 +1,5 @@
 import MENU from '../Constant/Menu.js';
+import Calculate from '../Model/Calculate.js';
 import Event from '../Model/Event.js';
 import Order from '../Model/Order.js';
 import InputView from '../View/InputView.js';
@@ -35,6 +36,16 @@ class Promotion {
     const BenefitsDetail = this.event.checkBenefitList(isGift);
     OutputView.printThis('<혜택 내역>');
     OutputView.printThis(BenefitsDetail);
+
+    this.calculate = new Calculate(BenefitsDetail);
+
+    const totalBenefits = this.calculate.totalBenefits();
+    OutputView.printThis('<총혜택 금액>');
+    OutputView.printThis(totalBenefits);
+
+    const expectedDiscount = this.calculate.expectedTotal(isGift);
+    OutputView.printThis('<할인 후 예상 결제 금액>');
+    OutputView.printThis(totalPaid + expectedDiscount); // 최종 결제금
   }
 }
 

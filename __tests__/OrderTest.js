@@ -20,7 +20,7 @@ describe('Order 클래스 unit 테스트', () => {
     const order = new Order();
     const result = order.totalAmount(menu);
 
-    expect(result).toEqual(85000);
+    expect(result).toBe(85000);
   });
 
   test('각 주문메뉴들의 코스타입 반환', () => {
