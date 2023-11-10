@@ -20,12 +20,17 @@ class Benefits {
     const totalPaid = this.order.totalAmount(oredrMenus);
     OutputView.printThis(totalPaid); // 총 주문금액 출력
 
-    const courses = this.order.courseType(orderedList);
+    const courses = this.order.courseType(oredrMenus); // 각 주문 코스별로 분배한 결과 출력
 
-    this.event = new Event(reserveDay);
-    this.event.dayCheck();
+    this.event = new Event(reserveDay, courses);
+    this.event.checkAvailable(totalPaid);
 
-    const freeGift = this.order.hasFreeMenu(); // 증정여부
+    this.event.chirstMasDay();
+    this.event.everyDay();
+    this.event.specialDay();
+    this.event.FreeMenu(totalPaid); // 증정여부
+
+    const result = this.event.everyDay();
   }
 
   // aaa(name) {

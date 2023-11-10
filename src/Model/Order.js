@@ -44,7 +44,6 @@ class Order {
     const allMenu = eachMenuAndCount.flatMap(([menu, count]) =>
       this.#generateOrderItems([menu, count])
     );
-
     return this.#countMenuCourses(allMenu);
   }
 
@@ -73,12 +72,6 @@ class Order {
     );
 
     return found.name;
-  }
-
-  // 증정품 여부 체크
-  hasFreeMenu() {
-    if (this.#total > 120000) return '샴페인 1개';
-    return false;
   }
 }
 

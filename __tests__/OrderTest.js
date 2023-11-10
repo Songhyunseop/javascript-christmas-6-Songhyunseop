@@ -25,7 +25,12 @@ describe('Order 클래스 unit 테스트', () => {
 
   test('각 주문메뉴들의 코스타입 반환', () => {
     const menu = '티본스테이크-2,초코케이크-1,샴페인-1';
-    const answer = { Appetizer: 0, Dessert: 1, Drinks: 1, Main: 2 };
+    const answer = {
+      Appetizer: 0,
+      Dessert: 1,
+      Drinks: 1,
+      Main: 2,
+    };
     const order = new Order();
     const result = order.courseType(menu);
 

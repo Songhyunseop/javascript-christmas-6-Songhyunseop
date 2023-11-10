@@ -1,24 +1,37 @@
 class Event {
-  constructor(day) {
-    this.day = day;
+  constructor(day, courses) {
+    this.day = Number(day);
+    this.courses = courses;
   }
 
-  dayCheck() {
-    // console.log('11111');
+  checkAvailable(totalPaid) {
+    if (totalPaid > 10000) return;
   }
 
-  chirstMas() {
+  chirstMasDay() {
     if (this.day <= 25) {
-      const result = 1000 + (this.day - 1) * 100;
-      return result;
+      return -(1000 + (this.day - 1) * 100);
     }
     return '없음';
   }
 
-  //   everyDay () {
-  //     if(this.day==='weekdays')
-  //     if(this.day==='weekend')
-  //   }
+  everyDay() {
+    if (this.day === 3) return this.courses.Drinks * 2023;
+    if (this.day === 10) return this.courses.Main * 2023;
+
+    return 0;
+  }
+
+  specialDay() {
+    if (this.day === 3) return -1000;
+    return 0;
+  }
+
+  // 증정품 여부 체크
+  FreeMenu(total) {
+    if (total > 120000) return 25000;
+    return 0;
+  }
 }
 
 export default Event;
