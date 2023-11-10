@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable prefer-template */
 import { EOL as LINE_SEPARATOR } from 'os';
 import Order from '../src/Model/Order';
@@ -11,5 +12,14 @@ describe('Order 클래스 unit 테스트', () => {
     const result = order.menuList(menu);
 
     expect(result).toEqual(expect.stringContaining(print));
+  });
+
+  test('총 주문 합계 금액 반환', () => {
+    const menu = '해산물파스타-2,초코케이크-1';
+
+    const order = new Order();
+    const result = order.totalAmount(menu);
+
+    expect(result).toEqual(85000);
   });
 });

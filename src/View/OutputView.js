@@ -5,7 +5,7 @@ const OutputView = {
     Console.print('<주문 메뉴>');
   },
 
-  printMenus(menu) {
+  printThis(menu) {
     Console.print(menu);
   },
 };
