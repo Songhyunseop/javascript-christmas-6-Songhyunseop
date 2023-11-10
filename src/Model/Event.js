@@ -16,8 +16,10 @@ class Event {
   }
 
   everyDay() {
-    if (this.day === 3) return this.courses.Drinks * 2023;
-    if (this.day === 10) return this.courses.Main * 2023;
+    const dayOfWeek = new Date(`2023-12-${this.day}`).getDay();
+
+    if (dayOfWeek >= 5) return this.courses.Main * 2023;
+    if (dayOfWeek <= 5) return this.courses.Dessert * 2023;
 
     return 0;
   }

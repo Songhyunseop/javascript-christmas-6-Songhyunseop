@@ -26,7 +26,8 @@ class Benefits {
     this.event.checkAvailable(totalPaid);
 
     this.event.chirstMasDay();
-    this.event.everyDay();
+    const aa = this.event.everyDay();
+    console.log(aa);
     this.event.specialDay();
     this.event.FreeMenu(totalPaid); // 증정여부
 
