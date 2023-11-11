@@ -2,7 +2,19 @@ import Promotion from './Controller/Benefits.js';
 
 class App {
   async run() {
-    await new Promotion().show();
+    const promotion = new Promotion();
+
+    const { reserveDay, orderMenus } = await promotion.readReservationInput();
+    const { totalPaid, courses } = promotion.generateOrderInfo(orderMenus);
+
+    const event = promotion.createEvent(reserveDay, courses);
+
+    // 이벤트 확인 및 결과처리
+    const eventResult = promotion.checkEventResult(event, totalPaid);
+    const totalBenefit = promotion.processEventResult(eventResult, totalPaid);
+
+    // 뱃지 결과 출력
+    promotion.getBadgeResult(event, totalBenefit);
   }
 }
 

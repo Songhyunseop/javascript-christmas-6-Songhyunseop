@@ -8,8 +8,13 @@ import OutputView from '../View/OutputView.js';
 class Promotion {
   constructor() {
     this.order = new Order();
-    this.event = null;
-    this.calculate = null;
+  }
+
+  async readReservationInput() {
+    return {
+      reserveDay: await InputView.readDate(),
+      orderMenus: await InputView.readMenu(),
+    };
   }
 
   generateOrderInfo(oredrMenus) {
@@ -23,53 +28,51 @@ class Promotion {
     return { totalPaid, courses };
   }
 
-  generateFreeGiftDetails(isGift) {
+  generateFreeGiftDetails(event, totalPaid) {
+    const isFreeMenu = event.hasFreeMenu(totalPaid);
+
     OutputView.printThis('<증정 메뉴>');
-    OutputView.printThis(`${MENU.FREE_OPTION[Math.abs(isGift.result)]}\n`);
+    OutputView.printThis(`${MENU.FREE_OPTION[Math.abs(isFreeMenu.result)]}\n`);
+
+    return isFreeMenu;
   }
 
-  generateDiscountEventDetails(isGift) {
-    const BenefitsDetail = this.event.checkBenefitList(isGift);
-    OutputView.printThis('<혜택 내역>');
-    if (BenefitsDetail.length === 0) OutputView.printThis('없음\n');
-    else OutputView.printThis(BenefitsDetail);
+  generateDiscountEventDetails(event, isFree) {
+    const BenefitsDetail = event.checkBenefitList(isFree);
+    const formattedBenefits = event.formatOrderDetails(BenefitsDetail);
+
+    OutputView.printThis(`<혜택 내역>\n${formattedBenefits}`);
 
     return BenefitsDetail;
-    //
   }
 
-  calculateDiscounted(isGift) {
-    const totalBenefits = this.calculate.totalBenefits();
-    OutputView.printThis(`<총혜택 금액>\n${totalBenefits}\n`);
+  processEventResult({ eventDetail, isFreeMenu }, totalPaid) {
+    const calculate = new Calculate(eventDetail);
 
-    const expectedDiscount = this.calculate.expectedTotal(isGift);
+    const totalBenefit = calculate.totalBenefits();
+    const disCounted = calculate.expectedTotal(isFreeMenu);
 
-    return { totalBenefits, expectedDiscount };
-  }
-
-  async show() {
-    const reserveDay = await InputView.readDate();
-    const oredrMenus = await InputView.readMenu();
-
-    const { totalPaid, courses } = this.generateOrderInfo(oredrMenus);
-
-    this.event = new Event(reserveDay, courses);
-
-    this.event.checkAvailable(totalPaid);
-
-    const isGift = this.event.hasFreeMenu(totalPaid);
-    const giftResult = this.generateFreeGiftDetails(isGift);
-
-    const BenefitsDetail = this.generateDiscountEventDetails(isGift);
-
-    this.calculate = new Calculate(BenefitsDetail);
-    const { expectedDiscount, totalBenefits } =
-      this.calculateDiscounted(isGift);
-
+    OutputView.printThis(`<총혜택 금액>\n${totalBenefit}\n`);
     OutputView.printThis(
-      `<할인 후 예상 결제 금액>\n${totalPaid + expectedDiscount}\n`
+      `<할인 후 예상 결제 금액>\n${totalPaid + disCounted}\n`
     );
-    const badge = this.event.awardBadge(totalBenefits);
+    return totalBenefit;
+  }
+
+  createEvent(reserveDay, courses) {
+    return new Event(reserveDay, courses);
+  }
+
+  checkEventResult(event, totalPaid) {
+    event.checkAvailable(totalPaid);
+    const isFreeMenu = this.generateFreeGiftDetails(event, totalPaid);
+    const eventDetail = this.generateDiscountEventDetails(event, isFreeMenu);
+
+    return { eventDetail, isFreeMenu };
+  }
+
+  getBadgeResult(event, totalBenefit) {
+    const badge = event.awardBadge(totalBenefit);
     OutputView.printThis(`<12월 이벤트 배지>\n${badge}`);
   }
 }

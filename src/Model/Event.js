@@ -49,12 +49,12 @@ class Event {
     return { name: '증정 이벤트', result: 0 };
   }
 
-  checkBenefitList(isGift) {
+  checkBenefitList(isFree) {
     const discountMethods = [
       this.christMasDay.bind(this),
       this.everyDay.bind(this),
       this.specialDay.bind(this),
-      () => isGift,
+      () => isFree,
     ];
 
     const details = this.#getDiscountMethodResults(discountMethods);
@@ -73,10 +73,20 @@ class Event {
     return result;
   }
 
+  formatOrderDetails(details) {
+    if (details.length === 0) return '없음\n';
+
+    const result = `${details
+      .map((info) => `${info.name}: ${info.result}`)
+      .join('\n')}\n`;
+
+    return result;
+  }
+
   awardBadge(totalBenefits) {
-    if (totalBenefits >= 20000) return '산타';
-    if (totalBenefits >= 10000) return '트리';
-    if (totalBenefits >= 5000) return '별';
+    if (Math.abs(totalBenefits) >= 20000) return '산타';
+    if (Math.abs(totalBenefits) >= 10000) return '트리';
+    if (Math.abs(totalBenefits) >= 5000) return '별';
     return '없음';
   }
 }
