@@ -15,9 +15,7 @@ class Calculate {
   }
 
   expectedTotal(isGift) {
-    if (isGift.result !== 0) return this.totalBenefit + 25000;
-
-    return this.totalBenefit;
+    return this.totalBenefit + isGift.result;
   }
 }
 

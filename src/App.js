@@ -5,13 +5,13 @@ class App {
     const promotion = new Promotion();
 
     const { reserveDay, orderMenus } = await promotion.readReservationInput();
-    const { totalPaid, courses } = promotion.generateOrderInfo(orderMenus);
+    const courses = promotion.generateOrderInfo(orderMenus);
 
     const event = promotion.createEvent(reserveDay, courses);
 
     // 이벤트 확인 및 결과처리
-    const eventResult = promotion.checkEventResult(event, totalPaid);
-    const totalBenefit = promotion.processEventResult(eventResult, totalPaid);
+    const eventResult = promotion.eventResult(event);
+    const totalBenefit = promotion.benefitResult(eventResult);
 
     // 뱃지 결과 출력
     promotion.getBadgeResult(event, totalBenefit);
