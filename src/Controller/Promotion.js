@@ -2,6 +2,7 @@ import MENU from '../Constant/Menu.js';
 import Calculate from '../Model/Calculate.js';
 import Event from '../Model/Event.js';
 import Order from '../Model/Order.js';
+import { validateInput } from '../Utils/Validate.js';
 import InputView from '../View/InputView.js';
 import OutputView from '../View/OutputView.js';
 
@@ -12,10 +13,18 @@ class Promotion {
   }
 
   async readReservationInput() {
-    return {
-      reserveDay: await InputView.readDate(),
-      orderMenus: await InputView.readMenu(),
-    };
+    let reserveDay;
+    let orderMenus;
+
+    try {
+      reserveDay = await InputView.readDate();
+      orderMenus = await InputView.readMenu();
+      validateInput(reserveDay, 'orederMenus');
+    } catch (error) {
+      OutputView.printThis(error.message);
+    }
+
+    return { reserveDay, orderMenus };
   }
 
   generateOrderInfo(oredrMenus) {
@@ -56,6 +65,8 @@ class Promotion {
     const disCounted = calculate.expectedTotal(isFreeMenu);
 
     OutputView.printThis(`<총혜택 금액>\n${totalBenefit}\n`);
+    //
+    //
     OutputView.printThis(
       `<할인 후 예상 결제 금액>\n${this.totalPaid + disCounted}\n`
     );

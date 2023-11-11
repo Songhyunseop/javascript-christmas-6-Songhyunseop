@@ -1,4 +1,4 @@
-import Promotion from './Controller/Benefits.js';
+import Promotion from './Controller/Promotion.js';
 
 class App {
   async run() {
