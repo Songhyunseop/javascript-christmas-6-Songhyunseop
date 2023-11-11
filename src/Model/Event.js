@@ -5,7 +5,7 @@ class Event {
   }
 
   checkAvailable(totalPaid) {
-    if (totalPaid < 10000) this.day = 'noEvent';
+    if (totalPaid < 10000) return new Event('no Event', this.courses);
   }
 
   christMasDay() {
@@ -45,6 +45,7 @@ class Event {
 
   // 증정품 여부 체크
   hasFreeMenu(total) {
+    console.log(total);
     if (total >= 120000) return { name: '증정 이벤트', result: -25000 };
     return { name: '증정 이벤트', result: 0 };
   }

@@ -1,7 +1,9 @@
 class Calculate {
+  #totalBenefit;
+
   constructor(benefit) {
     this.benefit = benefit;
-    this.totalBenefit = null;
+    this.#totalBenefit = 0;
   }
 
   // 총 혜택금액 합산
@@ -10,12 +12,13 @@ class Calculate {
       (total, discount) => total + discount.result,
       0
     );
-    this.totalBenefit = result;
+    this.#totalBenefit = result;
+
     return result;
   }
 
   expectedTotal(isGift) {
-    return this.totalBenefit + isGift.result;
+    return this.#totalBenefit - isGift.result;
   }
 }
 

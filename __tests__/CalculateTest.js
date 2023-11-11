@@ -16,13 +16,16 @@ describe('Calculate 클래스 unit 테스트', () => {
   });
 
   test('증정금액을 제외한 총 할인금액 계산결과 반환', () => {
-    const isFree = { result: 25000 };
+    const isFree = [
+      { name: '크리스마스 이벤트', result: -15000 },
+      { name: '증정이벤트', result: -25000 },
+    ];
 
-    const calculate = new Calculate();
-    calculate.totalBenefit = -48000;
+    const calculate = new Calculate(isFree);
+    calculate.totalBenefits();
 
-    const result = calculate.expectedTotal(isFree);
+    const result = calculate.expectedTotal(isFree[1]);
 
-    expect(result).toBe(-23000);
+    expect(result).toBe(-15000);
   });
 });

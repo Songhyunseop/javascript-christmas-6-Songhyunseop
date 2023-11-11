@@ -7,9 +7,11 @@ import InputView from '../View/InputView.js';
 import OutputView from '../View/OutputView.js';
 
 class Promotion {
+  #totalPaid;
+
   constructor() {
     this.order = new Order();
-    this.totalPaid = null;
+    this.#totalPaid = 0;
   }
 
   async readReservationInput() {
@@ -32,7 +34,7 @@ class Promotion {
     const totalPaid = this.order.totalAmount(oredrMenus);
     const courses = this.order.courseType(oredrMenus);
 
-    this.totalPaid = totalPaid;
+    this.#totalPaid = totalPaid;
 
     OutputView.printThis(`<주문 메뉴>\n${orderedList}\n`);
     OutputView.printThis(`<할인 전 총주문 금액>\n${totalPaid}\n`);
@@ -41,7 +43,7 @@ class Promotion {
   }
 
   generateFreeGiftDetails(event) {
-    const isFreeMenu = event.hasFreeMenu(this.totalPaid);
+    const isFreeMenu = event.hasFreeMenu(this.#totalPaid);
 
     OutputView.printThis('<증정 메뉴>');
     OutputView.printThis(`${MENU.FREE_OPTION[Math.abs(isFreeMenu.result)]}\n`);
@@ -68,7 +70,7 @@ class Promotion {
     //
     //
     OutputView.printThis(
-      `<할인 후 예상 결제 금액>\n${this.totalPaid + disCounted}\n`
+      `<할인 후 예상 결제 금액>\n${this.#totalPaid + disCounted}\n`
     );
     return totalBenefit;
   }
@@ -78,7 +80,7 @@ class Promotion {
   }
 
   eventResult(event) {
-    event.checkAvailable(this.totalPaid);
+    event.checkAvailable(this.#totalPaid);
     const isFreeMenu = this.generateFreeGiftDetails(event);
     const eventDetail = this.generateDiscountEventDetails(event, isFreeMenu);
 
