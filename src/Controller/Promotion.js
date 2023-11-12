@@ -2,7 +2,7 @@ import MENU from '../Constant/Menu.js';
 import Calculate from '../Model/Calculate.js';
 import Event from '../Model/Event.js';
 import Order from '../Model/Order.js';
-import { validateInput } from '../Utils/Validate.js';
+import { validateDayInput, validateOrderInput } from '../Utils/Validate.js';
 import InputView from '../View/InputView.js';
 import OutputView from '../View/OutputView.js';
 
@@ -20,10 +20,11 @@ class Promotion {
 
     try {
       reserveDay = await InputView.readDate();
+      validateDayInput(reserveDay);
       orderMenus = await InputView.readMenu();
-      validateInput(reserveDay, orderMenus);
+      validateOrderInput(orderMenus);
     } catch (error) {
-      OutputView.printThis(error.message);
+      throw new Error(error.message);
     }
 
     return { reserveDay, orderMenus };
