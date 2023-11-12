@@ -21,7 +21,7 @@ class Promotion {
     try {
       reserveDay = await InputView.readDate();
       orderMenus = await InputView.readMenu();
-      validateInput(reserveDay, 'orederMenus');
+      validateInput(reserveDay, orderMenus);
     } catch (error) {
       OutputView.printThis(error.message);
     }

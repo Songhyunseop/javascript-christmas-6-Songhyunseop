@@ -18,7 +18,7 @@ class Event {
   }
 
   everyDay() {
-    if (this.day) {
+    if (this.day !== 'no Event') {
       const dayOfWeek = new Date(`2023-12-${this.day}`).getDay();
 
       if (dayOfWeek <= 5) {
@@ -45,7 +45,6 @@ class Event {
 
   // 증정품 여부 체크
   hasFreeMenu(total) {
-    console.log(total);
     if (total >= 120000) return { name: '증정 이벤트', result: -25000 };
     return { name: '증정 이벤트', result: 0 };
   }
