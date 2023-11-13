@@ -8,8 +8,8 @@ describe('Order 클래스 unit 테스트', () => {
     const menu = '해산물파스타-2,초코케이크-1';
     const print = '해산물파스타 2개' + LINE_SEPARATOR + '초코케이크 1개';
 
-    const order = new Order();
-    const result = order.menuList(menu);
+    const order = new Order(menu);
+    const result = order.menuList();
 
     expect(result).toEqual(expect.stringContaining(print));
   });
@@ -17,8 +17,8 @@ describe('Order 클래스 unit 테스트', () => {
   test('총 주문 합계 금액 반환', () => {
     const menu = '해산물파스타-2,초코케이크-1';
 
-    const order = new Order();
-    const result = order.totalAmount(menu);
+    const order = new Order(menu);
+    const result = order.totalAmount();
 
     expect(result).toBe(85000);
   });
@@ -31,8 +31,8 @@ describe('Order 클래스 unit 테스트', () => {
       Drinks: 1,
       Main: 2,
     };
-    const order = new Order();
-    const result = order.courseType(menu);
+    const order = new Order(menu);
+    const result = order.courseType();
 
     expect(result).toEqual(expect.objectContaining(answer));
   });
