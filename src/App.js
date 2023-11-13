@@ -27,12 +27,12 @@ class App {
       const { reserveDay, orderMenus } = await this.orderProcess.result();
 
       const order = this.createOrder(orderMenus);
+
       const eventProcess = new EventProcess(reserveDay, order);
-
       const calculate = this.createCalculate(eventProcess.result());
-      const benefitPrcoess = new BenefitProcess(calculate, order);
 
-      benefitPrcoess.printResult();
+      const benefitPrcess = new BenefitProcess(calculate, order);
+      benefitPrcess.printResult();
     } catch (error) {
       OutputView.printThis(error.message);
     }

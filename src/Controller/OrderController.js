@@ -16,22 +16,27 @@ class OrderProcess {
     try {
       reserveDay = validateDayInput(await InputView.readDate());
       orderMenus = validateOrderInput(await InputView.readMenu());
-      this.tryCount = 0;
     } catch (error) {
       OutputView.printThis(error.message);
-      await this.countRetryTimes();
+      const result = await this.countRetryTimes();
+      return result;
     }
+    this.tryCount = 0;
     return { reserveDay, orderMenus };
   }
 
   async countRetryTimes() {
-    this.tryCount += 1;
-    if (this.tryCount < 5) await this.readReservationInput();
+    if (this.tryCount < 5) {
+      this.tryCount += 1;
+      const result = await this.readReservationInput();
+      return result;
+    }
     throw new Error(
       '[ERROR] 5회 이상 잘못 입력하셨습니다. 처음부터 다시 입력하세요.'
     );
   }
 
+  // 주문에 대한 메뉴리스트, 합산 금액 반환
   #generateOrderDetails(orderMenus) {
     const order = new Order(orderMenus);
     const orderedList = order.menuList();
@@ -42,6 +47,7 @@ class OrderProcess {
 
   async result() {
     const { reserveDay, orderMenus } = await this.readReservationInput();
+    console.log('여기 undefined됨');
     const { orderedList, totalPaid } = this.#generateOrderDetails(orderMenus);
 
     OutputView.printThis(`<주문 메뉴>\n${orderedList}\n`);

@@ -1,6 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import { MissionUtils } from '@woowacourse/mission-utils';
 import OrderProcess from '../src/Controller/OrderController';
+import InputView from '../src/View/InputView';
 
 const mockQuestions = (inputs) => {
   MissionUtils.Console.readLineAsync = jest.fn();
@@ -40,20 +41,28 @@ test.each([
 
 describe('잘못된 메뉴 입력에 대한 예외처리', () => {
   test('메뉴에 없는 음식을 주문할 경우', async () => {
-    const logSpy = getLogSpy();
-
     mockQuestions(['9', '그냥-가짜파스타-1,바비큐립-1']);
+    const logSpy = getLogSpy();
 
     const orderController = new OrderProcess();
 
-    await expect(async () => {
-      await orderController.readReservationInput();
-    }).rejects.toThrowError(
-      '[ERROR] 5회 이상 잘못 입력하셨습니다. 처음부터 다시 입력하세요.'
-    );
+    await expect(orderController.readReservationInput()).rejects.toThrowError();
 
     expect(logSpy).toHaveBeenCalledWith(
       '[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.'
     );
   });
+});
+
+test('잘못된 입력 시 올바른 입력할 때 까지 재입력', async () => {
+  mockQuestions(['999', '1', '해산물파스타-1']);
+  const spying = jest.spyOn(InputView, 'readDate');
+
+  const orderController = new OrderProcess();
+
+  await expect(orderController.readReservationInput()).resolves.toEqual({
+    orderMenus: '해산물파스타-1',
+    reserveDay: '1',
+  });
+  expect(spying).toHaveBeenCalledTimes(2);
 });
