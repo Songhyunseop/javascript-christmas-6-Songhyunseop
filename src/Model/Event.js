@@ -63,20 +63,7 @@ class Event {
     return this.#getDiscountResults(result);
   }
 
-  // checkBenefitList(isFree) {
-  //   const discountMethods = [
-  //     this.christMasDay.bind(this),
-  //     this.everyDay.bind(this),
-  //     this.specialDay.bind(this),
-  //     () => isFree,
-  //   ];
-
-  //   const details = this.#getDiscountResults(discountMethods);
-
-  //   return details;
-  // }
-
-  // 할인 적용 내역 filter
+  // 혜택 적용내역 filter
   #getDiscountResults(discountResult) {
     const result = discountResult.filter((el) => el.result);
 

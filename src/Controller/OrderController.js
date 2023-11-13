@@ -4,21 +4,32 @@ import InputView from '../View/InputView.js';
 import OutputView from '../View/OutputView.js';
 
 class OrderProcess {
+  constructor() {
+    this.tryCount = 0;
+  }
+
   // 입력값 확인 메서드
   async readReservationInput() {
     let reserveDay;
     let orderMenus;
 
     try {
-      reserveDay = await InputView.readDate();
-      validateDayInput(reserveDay);
-      orderMenus = await InputView.readMenu();
-      validateOrderInput(orderMenus);
+      reserveDay = validateDayInput(await InputView.readDate());
+      orderMenus = validateOrderInput(await InputView.readMenu());
+      this.tryCount = 0;
     } catch (error) {
-      throw new Error(error.message);
+      OutputView.printThis(error.message);
+      await this.countRetryTimes();
     }
-
     return { reserveDay, orderMenus };
+  }
+
+  async countRetryTimes() {
+    this.tryCount += 1;
+    if (this.tryCount < 5) await this.readReservationInput();
+    throw new Error(
+      '[ERROR] 5회 이상 잘못 입력하셨습니다. 처음부터 다시 입력하세요.'
+    );
   }
 
   #generateOrderDetails(orderMenus) {
