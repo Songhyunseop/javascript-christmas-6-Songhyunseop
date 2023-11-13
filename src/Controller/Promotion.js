@@ -14,52 +14,72 @@ class Promotion {
     this.#totalPaid = 0;
   }
 
-  async readReservationInput() {
-    let reserveDay;
-    let orderMenus;
+  // 입력값 확인 메서드
+  // async readReservationInput() {
+  //   let reserveDay;
+  //   let orderMenus;
 
-    try {
-      reserveDay = await InputView.readDate();
-      validateDayInput(reserveDay);
-      orderMenus = await InputView.readMenu();
-      validateOrderInput(orderMenus);
-    } catch (error) {
-      throw new Error(error.message);
-    }
+  //   try {
+  //     reserveDay = await InputView.readDate();
+  //     validateDayInput(reserveDay);
+  //     orderMenus = await InputView.readMenu();
+  //     validateOrderInput(orderMenus);
+  //   } catch (error) {
+  //     throw new Error(error.message);
+  //   }
 
-    return { reserveDay, orderMenus };
-  }
+  //   return { reserveDay, orderMenus };
+  // }
 
-  generateOrderInfo(oredrMenus) {
-    const orderedList = this.order.menuList(oredrMenus);
-    const totalPaid = this.order.totalAmount(oredrMenus);
-    const courses = this.order.courseType(oredrMenus);
+  // generateOrderInfo(oredrMenus) {
+  //   const orderedList = this.order.menuList(oredrMenus);
+  //   const totalPaid = this.order.totalAmount(oredrMenus);
+  //   const courses = this.order.courseType(oredrMenus);
 
-    this.#totalPaid = totalPaid;
+  //   this.#totalPaid = totalPaid;
 
-    OutputView.printThis(`<주문 메뉴>\n${orderedList}\n`);
-    OutputView.printThis(`<할인 전 총주문 금액>\n${totalPaid}\n`);
+  //   return { orderedList, courses };
+  // }
 
-    return courses;
-  }
+  // async returnOrdersResult() {
+  //   const { reserveDay, orderMenus } = await this.readReservationInput();
+  //   const { orderedList, courses } = this.generateOrderInfo(orderMenus);
 
-  generateFreeGiftDetails(event) {
-    const isFreeMenu = event.hasFreeMenu(this.#totalPaid);
+  //   OutputView.printThis(`<주문 메뉴>\n${orderedList}\n`);
+  //   OutputView.printThis(`<할인 전 총주문 금액>\n${this.#totalPaid}\n`);
+  //   return { reserveDay, courses };
+  // }
 
-    OutputView.printThis('<증정 메뉴>');
-    OutputView.printThis(`${MENU.FREE_OPTION[Math.abs(isFreeMenu.result)]}\n`);
+  // //
+  // createEvent(reserveDay, courses) {
+  //   return new Event(reserveDay, courses);
+  // }
 
-    return isFreeMenu;
-  }
+  // eventResult(event) {
+  //   event.checkAvailable(this.#totalPaid);
+  //   const isFreeMenu = this.generateFreeGiftDetails(event);
+  //   const eventDetail = this.generateDiscountDetails(event, isFreeMenu);
 
-  generateDiscountEventDetails(event, isFree) {
-    const BenefitsDetail = event.checkBenefitList(isFree);
-    const formattedBenefits = event.formatOrderDetails(BenefitsDetail);
+  //   return { eventDetail, isFreeMenu };
+  // }
 
-    OutputView.printThis(`<혜택 내역>\n${formattedBenefits}`);
+  // generateFreeGiftDetails(event) {
+  //   const isFreeMenu = event.hasFreeMenu(this.#totalPaid);
 
-    return BenefitsDetail;
-  }
+  //   OutputView.printThis('<증정 메뉴>');
+  //   OutputView.printThis(`${MENU.FREE_OPTION[Math.abs(isFreeMenu.result)]}\n`);
+
+  //   return isFreeMenu;
+  // }
+
+  // generateDiscountDetails(event, isFree) {
+  //   const BenefitsDetail = event.checkBenefitList(isFree);
+  //   const formattedBenefits = event.formatOrderDetails(BenefitsDetail);
+
+  //   OutputView.printThis(`<혜택 내역>\n${formattedBenefits}`);
+
+  //   return BenefitsDetail;
+  // }
 
   benefitResult({ eventDetail, isFreeMenu }) {
     const calculate = new Calculate(eventDetail);
@@ -74,18 +94,6 @@ class Promotion {
       `<할인 후 예상 결제 금액>\n${this.#totalPaid + disCounted}\n`
     );
     return totalBenefit;
-  }
-
-  createEvent(reserveDay, courses) {
-    return new Event(reserveDay, courses);
-  }
-
-  eventResult(event) {
-    event.checkAvailable(this.#totalPaid);
-    const isFreeMenu = this.generateFreeGiftDetails(event);
-    const eventDetail = this.generateDiscountEventDetails(event, isFreeMenu);
-
-    return { eventDetail, isFreeMenu };
   }
 
   getBadgeResult(event, totalBenefit) {

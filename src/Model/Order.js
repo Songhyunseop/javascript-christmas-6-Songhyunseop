@@ -1,15 +1,13 @@
 import MENU from '../Constant/Menu.js';
 
 class Order {
-  #total;
-
-  constructor() {
-    this.#total = 0;
+  constructor(menus) {
+    this.menus = menus;
   }
 
   // 입력된 주문 메뉴를 형식에 맞춰 반환
-  menuList(menuInput) {
-    const eachMenuAndCount = menuInput.split(',').map((el) => el.split('-'));
+  menuList() {
+    const eachMenuAndCount = this.menus.split(',').map((el) => el.split('-'));
     const result = eachMenuAndCount
       .map((el) => `${el[0]} ${el[1]}개`)
       .join('\n');
@@ -18,17 +16,15 @@ class Order {
   }
 
   // 입력된 주문메뉴의 총합 금액 반환
-  totalAmount(menuInput) {
-    const eachMenuAndCount = menuInput.split(',').map((el) => el.split('-'));
+  totalAmount() {
+    const eachMenuAndCount = this.menus.split(',').map((el) => el.split('-'));
 
     const result = eachMenuAndCount.reduce(
       (total, menuItem) => total + this.#calculateTotalMenuAmount(menuItem),
       0
     );
 
-    this.#total = result;
-
-    return this.#total;
+    return result;
   }
 
   #calculateTotalMenuAmount(menuItem) {
@@ -39,8 +35,8 @@ class Order {
   }
 
   // 입력된 각 메뉴의 코스타입 반환
-  courseType(menuInput) {
-    const eachMenuAndCount = menuInput.split(',').map((el) => el.split('-'));
+  courseType() {
+    const eachMenuAndCount = this.menus.split(',').map((el) => el.split('-'));
     const allMenu = eachMenuAndCount.flatMap(([menu, count]) =>
       this.#generateOrderedItems([menu, count])
     );

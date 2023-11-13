@@ -5,20 +5,21 @@ class Event {
   }
 
   checkAvailable(totalPaid) {
-    if (totalPaid < 10000) return new Event('no Event', this.courses);
+    if (totalPaid < 10000) return new Event('NO_EVENT', this.courses);
+    return this;
   }
 
   christMasDay() {
-    if (this.day !== 'noEvent' && this.day <= 25) {
+    if (this.day !== 'NO_EVENT' && this.day <= 25) {
       const result = -(1000 + (this.day - 1) * 100);
 
       return { name: '크리스마스 디데이 할인', result };
     }
-    return { name: '크리스마스 디데이 할인', result: 0 };
+    return 'NO_EVENT';
   }
 
   everyDay() {
-    if (this.day !== 'no Event') {
+    if (this.day !== 'NO_EVENT') {
       const dayOfWeek = new Date(`2023-12-${this.day}`).getDay();
 
       if (dayOfWeek <= 5) {
@@ -31,7 +32,7 @@ class Event {
       }
     }
 
-    return { name: '주말 할인', result: 0 };
+    return 'NO_EVENT';
   }
 
   specialDay() {
@@ -40,54 +41,45 @@ class Event {
     if (specials.find((day) => day === this.day)) {
       return { name: '특별 할인', result: -1000 };
     }
-    return { name: '특별 할인', result: 0 };
+    return 'NO_EVENT';
   }
 
   // 증정품 여부 체크
   hasFreeMenu(total) {
     if (total >= 120000) return { name: '증정 이벤트', result: -25000 };
-    return { name: '증정 이벤트', result: 0 };
+    return { result: 0 };
   }
 
-  checkBenefitList(isFree) {
-    const discountMethods = [
+  getCheckedEventTotal(totalPaid) {
+    const eventCheckMethods = [
       this.christMasDay.bind(this),
       this.everyDay.bind(this),
       this.specialDay.bind(this),
-      () => isFree,
+      () => this.hasFreeMenu(totalPaid),
     ];
 
-    const details = this.#getDiscountMethodResults(discountMethods);
+    const result = eventCheckMethods.map((el) => el());
 
-    return details;
+    return this.#getDiscountResults(result);
   }
+
+  // checkBenefitList(isFree) {
+  //   const discountMethods = [
+  //     this.christMasDay.bind(this),
+  //     this.everyDay.bind(this),
+  //     this.specialDay.bind(this),
+  //     () => isFree,
+  //   ];
+
+  //   const details = this.#getDiscountResults(discountMethods);
+
+  //   return details;
+  // }
 
   // 할인 적용 내역 filter
-  #getDiscountMethodResults(Methods) {
-    const result = Methods.filter((method) => {
-      const info = method();
-
-      return Math.abs(info.result) !== 0;
-    }).map((method) => method());
-
+  #getDiscountResults(discountResult) {
+    const result = discountResult.filter((el) => el.result);
     return result;
-  }
-
-  formatOrderDetails(details) {
-    if (details.length === 0) return '없음\n';
-
-    const result = `${details
-      .map((info) => `${info.name}: ${info.result}`)
-      .join('\n')}\n`;
-
-    return result;
-  }
-
-  awardBadge(totalBenefits) {
-    if (Math.abs(totalBenefits) >= 20000) return '산타';
-    if (Math.abs(totalBenefits) >= 10000) return '트리';
-    if (Math.abs(totalBenefits) >= 5000) return '별';
-    return '없음';
   }
 }
 

@@ -1,24 +1,40 @@
-import Promotion from './Controller/Promotion.js';
+import OrderProcess from './Controller/OrderProcess.js';
+import EventProcess from './Controller/EventProcess.js';
+import BenefitProcess from './Controller/BenefitProcess.js';
 import OutputView from './View/OutputView.js';
+import Order from './Model/Order.js';
+import Calculate from './Model/Calculate.js';
 
 class App {
+  constructor() {
+    this.orderProcess = new OrderProcess();
+  }
+
+  createOrder(orderMenus) {
+    return new Order(orderMenus);
+  }
+
+  // createEvent() {
+  //   return new Event();
+  // }
+
+  createCalculate(benefits) {
+    return new Calculate(benefits);
+  }
+
   async run() {
-    const promotion = new Promotion();
     try {
-      const { reserveDay, orderMenus } = await promotion.readReservationInput();
-      const courses = promotion.generateOrderInfo(orderMenus);
+      const { reserveDay, orderMenus } = await this.orderProcess.result();
 
-      const event = promotion.createEvent(reserveDay, courses);
+      const order = this.createOrder(orderMenus);
+      const eventProcess = new EventProcess(reserveDay, order);
 
-      // 이벤트 확인 및 결과처리
-      const eventResult = promotion.eventResult(event);
-      const totalBenefit = promotion.benefitResult(eventResult);
+      const calculate = this.createCalculate(eventProcess.result());
+      const benefitPrcoess = new BenefitProcess(calculate, order);
 
-      // 뱃지 결과 출력
-      promotion.getBadgeResult(event, totalBenefit);
+      benefitPrcoess.printResult();
     } catch (error) {
       OutputView.printThis(error.message);
-      return;
     }
   }
 }

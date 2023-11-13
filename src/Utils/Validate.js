@@ -1,4 +1,4 @@
-import MENU from '../Constant/Menu';
+import MENU from '../Constant/Menu.js';
 
 const validateDayInput = (reserveDay) => {
   if (Number.isNaN(new Date(`2023-12-${reserveDay}`).getDay())) {
