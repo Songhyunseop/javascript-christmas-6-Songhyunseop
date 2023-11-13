@@ -79,6 +79,7 @@ class Event {
   // 할인 적용 내역 filter
   #getDiscountResults(discountResult) {
     const result = discountResult.filter((el) => el.result);
+
     return result;
   }
 }

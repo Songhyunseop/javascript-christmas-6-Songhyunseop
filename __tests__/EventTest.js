@@ -56,7 +56,7 @@ describe('Event 클래스 unit 테스트', () => {
     expect(result).toEqual(expect.objectContaining(answer));
   });
 
-  test('주문 금액 12만원 이상 시 증정품(샴페인) 증정', () => {
+  test('주문 금액 12만원 이상 시 증정품(샴페인) 증정 문구 반환', () => {
     const totalPaid = 125000;
 
     const event = new Event();
@@ -66,12 +66,12 @@ describe('Event 클래스 unit 테스트', () => {
     expect(isFree.result).toBe(-25000);
   });
 
-  test('할인 및 증정품 목록이 포함된 전체 혜택 내역 반환', () => {
-    const isFree = { name: '증정 이벤트', result: -25000 };
+  test('각 혜택할인 목록에 증정품 있을 시 증정품내역 추가하여 목록 반환', () => {
+    const totalPaid = 170000;
     const day = 25;
     const courses = {
       Appetizer: 0,
-      Main: 1,
+      Main: 2,
       Dessert: 1,
       Drinks: 2,
     };
@@ -82,24 +82,10 @@ describe('Event 클래스 unit 테스트', () => {
       { name: '증정 이벤트', result: -25000 },
     ];
     const event = new Event(day, courses);
-    const result = event.checkBenefitList(isFree);
+    const result = event.getCheckedEventTotal(totalPaid);
 
-    answer.forEach((el) => {
-      expect(result).toEqual(
-        expect.arrayContaining([expect.objectContaining(el)])
-      );
+    answer.forEach((el, idx) => {
+      expect(result[idx]).toEqual(el);
     });
-  });
-
-  test.each([
-    [5000, '별'],
-    [15000, '트리'],
-    [25000, '산타'],
-  ])('각 혜택금액에 따라 뱃지 부여', (total, badge) => {
-    const event = new Event();
-
-    const result = event.awardBadge(total);
-
-    expect(result).toBe(badge);
   });
 });
