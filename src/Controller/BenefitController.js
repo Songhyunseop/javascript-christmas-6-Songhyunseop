@@ -2,21 +2,14 @@ import Event from '../Model/Event.js';
 import OutputView from '../View/OutputView.js';
 
 class BenefitProcess {
-  constructor(calculate, order) {
-    this.calculate = calculate;
+  constructor(benefit, order) {
+    this.benefit = benefit;
     this.order = order;
   }
 
-  returnBadge(totalBenefits) {
-    if (Math.abs(totalBenefits) >= 20000) return '산타';
-    if (Math.abs(totalBenefits) >= 10000) return '트리';
-    if (Math.abs(totalBenefits) >= 5000) return '별';
-    return '없음';
-  }
-
   getTotalAndBadge() {
-    const totalBenefit = this.calculate.totalBenefits();
-    const badge = this.returnBadge(totalBenefit);
+    const totalBenefit = this.benefit.total();
+    const badge = this.benefit.returnBadge(totalBenefit);
 
     return { totalBenefit, badge };
   }
@@ -25,8 +18,8 @@ class BenefitProcess {
     const event = new Event();
     const totalPaid = this.order.totalAmount();
 
-    const isFreeGift = event.hasFreeMenu(totalPaid);
-    const totalDisCounted = this.calculate.expectedTotal(isFreeGift);
+    const isFreeGift = event.checkFreeMenu(totalPaid);
+    const totalDisCounted = this.benefit.exceptGift(isFreeGift);
 
     return { totalDisCounted };
   }

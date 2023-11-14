@@ -1,18 +1,31 @@
 /* eslint-disable max-lines-per-function */
+import { EVENT } from '../src/Constant/Event';
 import Event from '../src/Model/Event';
 
 describe('Event 클래스 unit 테스트', () => {
-  test('12월 1일~25일 내에 주문 시 크리스마스 이벤트 적용', () => {
-    const day = 15;
-    const answer = { name: '크리스마스 디데이 할인', result: -2400 };
+  describe('크리스마스 이벤트 체크', () => {
+    test('12월 1일~25일 내에 주문 시 크리스마스 이벤트 적용', () => {
+      const day = 15;
+      const answer = { name: EVENT.CHRISTMAS, result: -2400 };
 
-    const event = new Event(day);
-    const result = event.christmasDay();
+      const event = new Event(day);
+      const result = event.checkChristmas();
 
-    expect(result).toEqual(expect.objectContaining(answer));
+      expect(result).toEqual(expect.objectContaining(answer));
+    });
+
+    test('25일 이후 주문 시 크리스마스 이벤트 미적용', () => {
+      const day = 30;
+      const answer = EVENT.NO_BENEFIT_DAY;
+
+      const event = new Event(day);
+      const result = event.checkChristmas();
+
+      expect(result).toEqual(answer);
+    });
   });
 
-  describe('예약날짜에 따라 메뉴할인 항목 부분 적용', () => {
+  describe('평일,주말에 대한 이벤트 체크', () => {
     test('예약날짜가 평일인 경우 - Dessert 할인 적용', () => {
       const day = 20;
       const orders = {
@@ -24,7 +37,7 @@ describe('Event 클래스 unit 테스트', () => {
       const answer = { name: '평일 할인', result: -6069 };
 
       const event = new Event(day, orders);
-      const result = event.everyDay();
+      const result = event.checkEveryDay();
 
       expect(result).toEqual(expect.objectContaining(answer));
     });
@@ -40,7 +53,7 @@ describe('Event 클래스 unit 테스트', () => {
       const answer = { name: '주말 할인', result: -10115 };
 
       const event = new Event(day, orders);
-      const result = event.everyDay();
+      const result = event.checkEveryDay();
 
       expect(result).toEqual(expect.objectContaining(answer));
     });
@@ -51,7 +64,7 @@ describe('Event 클래스 unit 테스트', () => {
     const answer = { name: '특별 할인', result: -1000 };
 
     const event = new Event(day, null);
-    const result = event.specialDay();
+    const result = event.checkSpecialDay();
 
     expect(result).toEqual(expect.objectContaining(answer));
   });
@@ -60,7 +73,7 @@ describe('Event 클래스 unit 테스트', () => {
     const totalPaid = 125000;
 
     const event = new Event();
-    const isFree = event.hasFreeMenu(totalPaid);
+    const isFree = event.checkFreeMenu(totalPaid);
 
     expect(isFree.name).toEqual(expect.stringContaining('증정 이벤트'));
     expect(isFree.result).toBe(-25000);

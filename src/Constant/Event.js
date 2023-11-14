@@ -1,6 +1,6 @@
 const EVENT = {
   MIN_PAID: 10000,
-  NO_BENEFIT: 'NO_EVENT',
+  NO_BENEFIT_DAY: 'NO_EVENT_DAY',
   CHRISTMAS: '크리스마스 디데이 할인',
   EVERY_WEEKS: '주말 할인',
   EVERY_WEEKEND: '평일 할인',
@@ -10,8 +10,8 @@ const EVENT = {
 
 const CHRISTMAS = {
   END: 25,
-  BASE_DISCOUNT: 1000,
-  DISCOUNT: 100,
+  BASE_DISCOUNT: -1000,
+  DISCOUNT: -100,
 };
 
 const EVERY = {

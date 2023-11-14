@@ -5,7 +5,7 @@ import { formatOrderDetails } from '../Utils/utils.js';
 
 class EventProcess {
   constructor(reserveDay, order) {
-    this.day = reserveDay;
+    this.day = Number(reserveDay);
     this.order = order;
     this.event = null;
   }
@@ -18,7 +18,7 @@ class EventProcess {
   }
 
   #generateFreeGiftDetails(totalPaid) {
-    const isFreeMenu = this.event.hasFreeMenu(totalPaid);
+    const isFreeMenu = this.event.checkFreeMenu(totalPaid);
 
     return isFreeMenu;
   }
@@ -36,13 +36,13 @@ class EventProcess {
     const totalPaid = this.order.totalAmount();
 
     this.#checkEventAvailable(totalPaid);
-    const FreeGiftResult = this.#generateFreeGiftDetails(totalPaid);
-    const BenefitsDetail = this.#generateAppliedBenefits(totalPaid);
+    const freeGift = this.#generateFreeGiftDetails(totalPaid);
+    const benefitsDetail = this.#generateAppliedBenefits(totalPaid);
 
-    OutputView.printThis(`<증정 메뉴>\n${this.#isFree(FreeGiftResult.result)}`);
-    OutputView.printThis(`<혜택 내역>\n${formatOrderDetails(BenefitsDetail)}`);
+    OutputView.printThis(`<증정 메뉴>\n${this.#isFree(freeGift.result)}`);
+    OutputView.printThis(`<혜택 내역>\n${formatOrderDetails(benefitsDetail)}`);
 
-    return BenefitsDetail;
+    return benefitsDetail;
   }
 }
 

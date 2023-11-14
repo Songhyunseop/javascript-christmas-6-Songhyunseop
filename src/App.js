@@ -1,9 +1,11 @@
 import OrderProcess from './Controller/OrderController.js';
 import EventProcess from './Controller/EventController.js';
 import BenefitProcess from './Controller/BenefitController.js';
-import OutputView from './View/OutputView.js';
+
 import Order from './Model/Order.js';
-import Calculate from './Model/Calculate.js';
+import Benefits from './Model/Benefit.js';
+
+import OutputView from './View/OutputView.js';
 
 class App {
   constructor() {
@@ -14,12 +16,12 @@ class App {
     return new Order(orderMenus);
   }
 
-  // createEvent() {
-  //   return new Event();
-  // }
+  createEvent() {
+    return new Event();
+  }
 
-  createCalculate(benefits) {
-    return new Calculate(benefits);
+  createBenefit(benefits) {
+    return new Benefits(benefits);
   }
 
   async run() {
@@ -29,9 +31,9 @@ class App {
       const order = this.createOrder(orderMenus);
 
       const eventProcess = new EventProcess(reserveDay, order);
-      const calculate = this.createCalculate(eventProcess.result());
+      const benefits = this.createBenefit(eventProcess.result());
 
-      const benefitPrcess = new BenefitProcess(calculate, order);
+      const benefitPrcess = new BenefitProcess(benefits, order);
       benefitPrcess.printResult();
     } catch (error) {
       OutputView.printThis(error.message);
