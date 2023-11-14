@@ -47,6 +47,14 @@ describe('잘못된 날짜 입력에 대한 예외처리', () => {
       ERROR.EXCEEDED_LIMIT
     );
   });
+
+  test('빈 공백을 입력할 경우', async () => {
+    mockQuestions([]);
+    const orderController = new OrderProcess();
+    await expect(orderController.readReservationInput()).rejects.toThrowError(
+      ERROR.INVALID_DAY
+    );
+  });
 });
 
 describe('잘못된 메뉴 입력에 대한 예외처리', () => {

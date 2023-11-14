@@ -18,6 +18,7 @@ class BenefitProcess {
   getDiscountedPrice() {
     const totalPaid = this.order.totalAmount();
     const freeGift = Event.checkFreeMenu(totalPaid);
+
     const totalDisCounted = this.benefit.exceptGift(freeGift);
 
     return { totalDisCounted, totalPaid };
