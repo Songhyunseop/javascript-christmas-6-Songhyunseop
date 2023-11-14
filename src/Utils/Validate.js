@@ -26,11 +26,18 @@ const validateOrderInput = (orderMenus) => {
     return menuCourse?.name === 'Drinks';
   });
 
+  const menus = orderInfo.map((info) => info[0]);
+  const isDuplicate = menus.length !== new Set(menus).size;
+
   if (isNotMenu) {
     throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.');
   }
   if (isOnlyDrinks) {
-    throw new Error('[ERROR] 음료만 주문할 수 없습니다. 다시 입력해 주세요.');
+    throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.');
+  }
+
+  if (isDuplicate) {
+    throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.');
   }
 
   return orderMenus;

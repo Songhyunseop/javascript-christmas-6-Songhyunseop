@@ -59,12 +59,24 @@ describe('잘못된 메뉴 입력에 대한 예외처리', () => {
     const orderController = new OrderProcess();
     await expect(orderController.readReservationInput()).rejects.toThrowError();
     expect(logSpy).toHaveBeenCalledWith(
-      '[ERROR] 음료만 주문할 수 없습니다. 다시 입력해 주세요.'
+      '[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.'
     );
   });
 
   test('잘못된 주문개수를 입력할 경우', async () => {
     mockQuestions(['3', '제로콜라-*a^^']);
+    const logSpy = getLogSpy();
+
+    const orderController = new OrderProcess();
+    await expect(orderController.readReservationInput()).rejects.toThrowError();
+
+    expect(logSpy).toHaveBeenCalledWith(
+      '[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.'
+    );
+  });
+
+  test('같은 메뉴를 중복 주문할 경우', async () => {
+    mockQuestions(['3', '해산물파스타-1,해산물파스타-2']);
     const logSpy = getLogSpy();
 
     const orderController = new OrderProcess();
