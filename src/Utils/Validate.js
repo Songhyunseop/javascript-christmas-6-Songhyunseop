@@ -15,6 +15,7 @@ const validateOrderInput = (orderMenus) => {
   const numberForm = /^\d+$/;
   const orderInfo = orderMenus.split(',').map((el) => el.split('-'));
 
+  console.log(orderMenus);
   const isNotMenu = orderInfo.some(
     ([menu, count]) =>
       MENU.LIST[menu] === undefined || numberForm.test(count) === false

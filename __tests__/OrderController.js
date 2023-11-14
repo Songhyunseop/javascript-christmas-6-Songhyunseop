@@ -29,9 +29,7 @@ test.each([
 
   const orderController = new OrderProcess();
 
-  await expect(async () => {
-    await orderController.readReservationInput();
-  }).rejects.toThrowError(
+  await expect(orderController.readReservationInput()).rejects.toThrowError(
     '[ERROR] 5회 이상 잘못 입력하셨습니다. 처음부터 다시 입력하세요.'
   );
   expect(logSpy).toHaveBeenCalledWith(
@@ -99,4 +97,44 @@ test('잘못된 입력 시 올바른 입력할 때 까지 재입력', async () =
     reserveDay: '1',
   });
   expect(spying).toHaveBeenCalledTimes(2);
+});
+
+describe('입력날짜와 주문메뉴 입력에 대한 결과처리', () => {
+  test('올바른 날짜와 메뉴를 입력할 경우', async () => {
+    mockQuestions(['25', '해산물파스타-2', '초코케이크-1']);
+
+    const orderController = new OrderProcess();
+    const result = await orderController.result();
+
+    const answer = { orderMenus: '해산물파스타-2', reserveDay: '25' };
+
+    expect(result).toEqual(answer);
+  });
+
+  test.each([
+    [
+      'AB',
+      '티본스테이크-1',
+      '[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.',
+    ],
+    [
+      '3',
+      '티본스테이크1개',
+      '[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.',
+    ],
+  ])(
+    '잘못된 날짜 입력할 경우',
+    async (reserveDay, orderMenus, expectedError) => {
+      mockQuestions([reserveDay, orderMenus]);
+      const logSpy = getLogSpy();
+
+      const orderController = new OrderProcess();
+
+      await expect(
+        orderController.readReservationInput()
+      ).rejects.toThrowError();
+
+      expect(logSpy).toHaveBeenCalledWith(expectedError);
+    }
+  );
 });

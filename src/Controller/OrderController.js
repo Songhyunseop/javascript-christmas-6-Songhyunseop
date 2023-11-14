@@ -18,14 +18,14 @@ class OrderProcess {
       orderMenus = validateOrderInput(await InputView.readMenu());
     } catch (error) {
       OutputView.printThis(error.message);
-      const result = await this.countRetryTimes();
+      const result = await this.#countRetryTimes();
       return result;
     }
     this.tryCount = 0;
     return { reserveDay, orderMenus };
   }
 
-  async countRetryTimes() {
+  async #countRetryTimes() {
     if (this.tryCount < 5) {
       this.tryCount += 1;
       const result = await this.readReservationInput();
