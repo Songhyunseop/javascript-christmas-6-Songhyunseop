@@ -1,6 +1,6 @@
 import MENU from '../Constant/Menu.js';
-import INDEX from '../Constant/Index.js';
-import { parseStringByDash, reduceMethod } from '../Utils/utils.js';
+import { ORDER } from '../Constant/Index.js';
+import { parseStringByDash } from '../Utils/utils.js';
 
 class Order {
   constructor(menus) {
@@ -11,7 +11,7 @@ class Order {
   menuList() {
     const eachMenuAndCount = parseStringByDash(this.menus);
     const result = eachMenuAndCount
-      .map((each) => `${each[INDEX.menuName]} ${each[INDEX.count]}개`)
+      .map((each) => `${each[ORDER.menuName]} ${each[ORDER.count]}개`)
       .join('\n');
 
     return result;

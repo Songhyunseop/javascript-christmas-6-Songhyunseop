@@ -2,6 +2,7 @@
 import {
   EVENT, CHRISTMAS, EVERY, SPECIAL, GIFT
 } from '../Constant/Event.js';
+import { DAY } from '../Constant/Index.js';
 
 import { getDayofWeeks } from '../Utils/utils.js';
 
@@ -23,15 +24,14 @@ class Event {
     return this.day !== EVENT.NO_BENEFIT_DAY && this.day <= CHRISTMAS.END;
   }
 
-  // prettier-ignore
+  #calculateChristmasDiscount() {
+    return CHRISTMAS.BASE_DISCOUNT + (this.day - 1) * CHRISTMAS.DISCOUNT;
+  }
+
   checkChristmas() {
     if (this.#isChristmas()) {
-      const result = (
-        CHRISTMAS.BASE_DISCOUNT
-        + (this.day - 1) * CHRISTMAS.DISCOUNT
-      );
-
-      return { name: EVENT.CHRISTMAS, result };
+      const benefit = this.#calculateChristmasDiscount();
+      return { name: EVENT.CHRISTMAS, benefit };
     }
     return EVENT.NO_BENEFIT_DAY;
   }
@@ -43,18 +43,18 @@ class Event {
 
   #isWeeks() {
     const dayofWeek = getDayofWeeks(this.day);
-    if (dayofWeek > 5) return true;
+    if (dayofWeek > DAY.WEEKDAY_END) return true;
     return false;
   }
 
   #calculateWeeksBenefit() {
-    const result = -(this.courses.Main * EVERY.DISCOUNT);
-    return { name: EVENT.EVERY_WEEKS, result };
+    const benefit = -(this.courses.Main * EVERY.DISCOUNT);
+    return { name: EVENT.EVERY_WEEKS, benefit };
   }
 
   #calculateWeekendBenefit() {
-    const result = -(this.courses.Dessert * EVERY.DISCOUNT);
-    return { name: EVENT.EVERY_WEEKEND, result };
+    const benefit = -(this.courses.Dessert * EVERY.DISCOUNT);
+    return { name: EVENT.EVERY_WEEKEND, benefit };
   }
 
   #checkEveryBenefit() {
@@ -76,7 +76,7 @@ class Event {
 
   checkSpecialDay() {
     if (this.#isSpecialday()) {
-      return { name: EVENT.SPECIAL, result: SPECIAL.DISCOUNT };
+      return { name: EVENT.SPECIAL, benefit: SPECIAL.DISCOUNT };
     }
     return EVENT.NO_BENEFIT_DAY;
   }
@@ -89,14 +89,14 @@ class Event {
 
   checkFreeMenu(total) {
     if (this.#isFreeGift(total)) {
-      return { name: EVENT.GIFT, result: GIFT.REWARD };
+      return { name: EVENT.GIFT, benefit: GIFT.REWARD };
     }
     return { result: 0 };
   }
 
   // 혜택 적용내역 filter
   #getDiscountResults(discountResult) {
-    return discountResult.filter((el) => el.result);
+    return discountResult.filter((amount) => amount.benefit);
   }
 
   getTotalChecked(totalPaid) {

@@ -18,8 +18,8 @@ class BenefitProcess {
     const event = new Event();
     const totalPaid = this.order.totalAmount();
 
-    const isFreeGift = event.checkFreeMenu(totalPaid);
-    const totalDisCounted = this.benefit.exceptGift(isFreeGift);
+    const freeGift = event.checkFreeMenu(totalPaid);
+    const totalDisCounted = this.benefit.exceptGift(freeGift);
 
     return { totalDisCounted };
   }

@@ -6,7 +6,7 @@ describe('Event 클래스 unit 테스트', () => {
   describe('크리스마스 이벤트 체크', () => {
     test('12월 1일~25일 내에 주문 시 크리스마스 이벤트 적용', () => {
       const day = 15;
-      const answer = { name: EVENT.CHRISTMAS, result: -2400 };
+      const answer = { name: EVENT.CHRISTMAS, benefit: -2400 };
 
       const event = new Event(day);
       const result = event.checkChristmas();
@@ -34,7 +34,7 @@ describe('Event 클래스 unit 테스트', () => {
         Dessert: 3,
         Drinks: 0,
       };
-      const answer = { name: '평일 할인', result: -6069 };
+      const answer = { name: '평일 할인', benefit: -6069 };
 
       const event = new Event(day, orders);
       const result = event.checkEveryDay();
@@ -50,7 +50,7 @@ describe('Event 클래스 unit 테스트', () => {
         Dessert: 1,
         Drinks: 0,
       };
-      const answer = { name: '주말 할인', result: -10115 };
+      const answer = { name: '주말 할인', benefit: -10115 };
 
       const event = new Event(day, orders);
       const result = event.checkEveryDay();
@@ -61,7 +61,7 @@ describe('Event 클래스 unit 테스트', () => {
 
   test('예약날짜가 할인 날짜와 일치할 경우 특별할인 적용', () => {
     const day = 3;
-    const answer = { name: '특별 할인', result: -1000 };
+    const answer = { name: '특별 할인', benefit: -1000 };
 
     const event = new Event(day, null);
     const result = event.checkSpecialDay();
@@ -76,7 +76,7 @@ describe('Event 클래스 unit 테스트', () => {
     const isFree = event.checkFreeMenu(totalPaid);
 
     expect(isFree.name).toEqual(expect.stringContaining('증정 이벤트'));
-    expect(isFree.result).toBe(-25000);
+    expect(isFree.benefit).toBe(-25000);
   });
 
   test('각 혜택할인 목록에 증정품 있을 시 증정품내역 추가하여 목록 반환', () => {
@@ -89,10 +89,10 @@ describe('Event 클래스 unit 테스트', () => {
       Drinks: 2,
     };
     const answer = [
-      { name: '크리스마스 디데이 할인', result: -3400 },
-      { name: '평일 할인', result: -2023 },
-      { name: '특별 할인', result: -1000 },
-      { name: '증정 이벤트', result: -25000 },
+      { name: '크리스마스 디데이 할인', benefit: -3400 },
+      { name: '평일 할인', benefit: -2023 },
+      { name: '특별 할인', benefit: -1000 },
+      { name: '증정 이벤트', benefit: -25000 },
     ];
     const event = new Event(day, courses);
     const result = event.getTotalChecked(totalPaid);

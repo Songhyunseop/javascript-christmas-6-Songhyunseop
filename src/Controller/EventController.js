@@ -18,9 +18,9 @@ class EventProcess {
   }
 
   #generateFreeGiftDetails(totalPaid) {
-    const isFreeMenu = this.event.checkFreeMenu(totalPaid);
+    const freeGift = this.event.checkFreeMenu(totalPaid);
 
-    return isFreeMenu;
+    return freeGift;
   }
 
   #generateAppliedBenefits(isFreeGift) {
@@ -28,8 +28,8 @@ class EventProcess {
     return BenefitsDetail;
   }
 
-  #isFree(freeGiftResult) {
-    return `${MENU.FREE_OPTION[Math.abs(freeGiftResult)]}\n`;
+  #isFree(freeGiftBenefit) {
+    return `${MENU.FREE_OPTION[Math.abs(freeGiftBenefit)]}\n`;
   }
 
   result() {
@@ -39,7 +39,7 @@ class EventProcess {
     const freeGift = this.#generateFreeGiftDetails(totalPaid);
     const benefitsDetail = this.#generateAppliedBenefits(totalPaid);
 
-    OutputView.printThis(`<증정 메뉴>\n${this.#isFree(freeGift.result)}`);
+    OutputView.printThis(`<증정 메뉴>\n${this.#isFree(freeGift.benefit)}`);
     OutputView.printThis(`<혜택 내역>\n${formatOrderDetails(benefitsDetail)}`);
 
     return benefitsDetail;

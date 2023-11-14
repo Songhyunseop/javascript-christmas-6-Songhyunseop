@@ -11,7 +11,7 @@ class Benefits {
   // 총 혜택금액 합산
   total() {
     const result = this.benefit.reduce(
-      (total, discount) => total + discount.result,
+      (total, amount) => total + amount.benefit,
       0
     );
     this.#totalBenefit = result;
@@ -21,7 +21,7 @@ class Benefits {
 
   // 증정품 제외 할인 금액
   exceptGift(isGift) {
-    return this.#totalBenefit - isGift.result;
+    return this.#totalBenefit - isGift.benefit;
   }
 
   // 혜택에 대한 뱃지 결과
