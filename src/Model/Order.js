@@ -37,11 +37,13 @@ class Order {
   }
 
   // 입력된 각 메뉴의 코스타입 반환
-  #generateOrderedItems(menuAndCount) {
-    const [menu, count] = menuAndCount;
-    const result = Array.from({ length: Number(count) }).map((_) => menu);
 
-    return result;
+  #findCourseType(menuName) {
+    const found = MENU.CATEGORIES.find((category) =>
+      category.list.includes(menuName)
+    );
+
+    return found.name;
   }
 
   #countMenuCourses(allMenu) {
@@ -55,12 +57,11 @@ class Order {
     return countResult;
   }
 
-  #findCourseType(menuName) {
-    const found = MENU.CATEGORIES.find((category) =>
-      category.list.includes(menuName)
-    );
+  #generateOrderedItems(menuAndCount) {
+    const [menu, count] = menuAndCount;
+    const result = Array.from({ length: Number(count) }).map((_) => menu);
 
-    return found.name;
+    return result;
   }
 
   getMenuCourse() {

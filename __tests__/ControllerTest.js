@@ -3,6 +3,9 @@ import { MissionUtils } from '@woowacourse/mission-utils';
 import OrderProcess from '../src/Controller/OrderController';
 import InputView from '../src/View/InputView';
 import { ERROR } from '../src/Constant/Message';
+import EventProcess from '../src/Controller/EventController';
+import OutputView from '../src/View/OutputView';
+import Order from '../src/Model/Order';
 
 const mockQuestions = (inputs) => {
   MissionUtils.Console.readLineAsync = jest.fn();
@@ -21,14 +24,13 @@ const getLogSpy = () => {
   return logSpy;
 };
 
-describe('잘못된 날자 입력에 대한 예외처리', () => {
+describe('잘못된 날짜 입력에 대한 예외처리', () => {
   test.each([
     ['AB', '티본스테이크-1'],
     ['#$@', '티본스테이크-1'],
   ])('숫자 이외의 값 입력할 경우', async ([reserveDay, orderMenus]) => {
     mockQuestions([reserveDay, orderMenus]);
     const logSpy = getLogSpy();
-
     const orderController = new OrderProcess();
 
     await expect(orderController.readReservationInput()).rejects.toThrowError(
@@ -39,7 +41,6 @@ describe('잘못된 날자 입력에 대한 예외처리', () => {
 
   test('잘못된 형식의 숫자 입력할 경우', async () => {
     mockQuestions(['009', '바비큐립-1']);
-    const logSpy = getLogSpy();
 
     const orderController = new OrderProcess();
     await expect(orderController.readReservationInput()).rejects.toThrowError(
@@ -89,6 +90,13 @@ describe('잘못된 메뉴 입력에 대한 예외처리', () => {
   });
 });
 
+test('20개 이상 주문 시 예외처리', async () => {
+  mockQuestions(['3', '해산물파스타-10,바비큐립-10']);
+
+  const orderController = new OrderProcess();
+  await expect(orderController.readReservationInput()).rejects.toThrowError();
+});
+
 test('잘못된 입력 시 올바른 입력할 때 까지 재입력', async () => {
   mockQuestions(['999', '1', '해산물파스타-1']);
   const spying = jest.spyOn(InputView, 'readDate');
@@ -131,5 +139,27 @@ describe('입력날짜와 주문메뉴 입력에 대한 결과처리', () => {
 
       expect(logSpy).toHaveBeenCalledWith(expectedError);
     }
+  );
+});
+
+test('각 이벤트 적용이 처리된 결과를 통해 증정내역과 혜택내역을 반환', () => {
+  mockQuestions(['3', '해산물파스타-3,바비큐립-2', '양송이수프-3']);
+
+  const logSpy = jest.spyOn(OutputView, 'printThis');
+  logSpy.mockClear();
+
+  const menu = '해산물파스타-2,초코케이크-1';
+  const order = new Order(menu);
+
+  const eventController = new EventProcess(3, order);
+  eventController.result();
+
+  expect(logSpy).toHaveBeenCalledWith(
+    expect.stringContaining('<증정 메뉴>\n없음')
+  );
+  expect(logSpy).toHaveBeenCalledWith(
+    expect.stringContaining(
+      '<혜택 내역>\n크리스마스 디데이 할인: -1,200원\n평일 할인: -2,023원\n특별 할인: -1,000원'
+    )
   );
 });

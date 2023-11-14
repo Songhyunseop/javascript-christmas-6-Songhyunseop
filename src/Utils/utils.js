@@ -1,13 +1,26 @@
+import { BENEFIT } from '../Constant/Config.js';
+
 const isArrayEmpty = (array) => {
   if (array.length === 0) return true;
   return false;
 };
+const convertObjectToArray = (objects) =>
+  objects.map((obj) => Object.values(obj));
 
-const formatOrderDetails = (details) => {
+// 각 숫자값을 1000 단위로 구분
+const formatAmount = (amount) => new Intl.NumberFormat('en-US').format(amount);
+
+// 각 객체의 key, value를 한 쌍의 문자열로 변환
+const formatDetails = (details) => {
   if (isArrayEmpty(details)) return '없음\n';
 
-  const result = `${details
-    .map((info) => `${info.name}: ${info.result}`)
+  const detailsArray = convertObjectToArray(details);
+
+  const result = `${detailsArray
+    .map(
+      (detail) =>
+        `${detail[BENEFIT.NAME]}: ${formatAmount(detail[BENEFIT.AMOUNT])}원`
+    )
     .join('\n')}\n`;
 
   return result;
@@ -25,4 +38,7 @@ const getDayofWeeks = (day) => {
   return dayOfWeek;
 };
 
-export { formatOrderDetails, parseStringByDash, getDayofWeeks };
+// prettier-ignore
+export {
+  formatDetails, parseStringByDash, getDayofWeeks, formatAmount
+};

@@ -38,11 +38,6 @@ const MENU = {
     Dessert: 0,
     Drinks: 0,
   }),
-
-  FREE_OPTION: Object.freeze({
-    0: '없음',
-    25000: '증정품: 샴페인 1개',
-  }),
 };
 
 export default MENU;

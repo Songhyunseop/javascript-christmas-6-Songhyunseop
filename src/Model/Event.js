@@ -83,15 +83,15 @@ class Event {
 
   // 증정품 이벤트 체크
 
-  #isFreeGift(total) {
+  static #isFreeGift(total) {
     return total >= GIFT.MIN_PAID;
   }
 
-  checkFreeMenu(total) {
+  static checkFreeMenu(total) {
     if (this.#isFreeGift(total)) {
       return { name: EVENT.GIFT, benefit: GIFT.REWARD };
     }
-    return { result: 0 };
+    return { benefit: 0 };
   }
 
   // 혜택 적용내역 filter
@@ -99,12 +99,12 @@ class Event {
     return discountResult.filter((amount) => amount.benefit);
   }
 
-  getTotalChecked(totalPaid) {
+  getTotalChecked(freeGift) {
     const eventCheckMethods = [
       () => this.checkChristmas(),
       () => this.checkEveryDay(),
       () => this.checkSpecialDay(),
-      () => this.checkFreeMenu(totalPaid),
+      () => freeGift,
     ];
 
     const result = eventCheckMethods.map((el) => el());

@@ -1,7 +1,9 @@
 import Event from '../Model/Event.js';
 import OutputView from '../View/OutputView.js';
-import MENU from '../Constant/Menu.js';
-import { formatOrderDetails } from '../Utils/utils.js';
+
+import { formatDetails } from '../Utils/utils.js';
+import { GIFT } from '../Constant/Event.js';
+import Factory from '../Utils/Factory.js';
 
 class EventProcess {
   constructor(reserveDay, order) {
@@ -12,24 +14,25 @@ class EventProcess {
 
   #checkEventAvailable(totalPaid) {
     const courses = this.order.getMenuCourse();
-    const event = new Event(this.day, courses);
+    const event = Factory.createEvent(this.day, courses);
 
     this.event = event.checkAvailable(totalPaid);
   }
 
   #generateFreeGiftDetails(totalPaid) {
-    const freeGift = this.event.checkFreeMenu(totalPaid);
+    const freeGift = Event.checkFreeMenu(totalPaid);
 
     return freeGift;
   }
 
-  #generateAppliedBenefits(isFreeGift) {
-    const BenefitsDetail = this.event.getTotalChecked(isFreeGift);
+  #generateAppliedBenefits(freeGift) {
+    const BenefitsDetail = this.event.getTotalChecked(freeGift);
+
     return BenefitsDetail;
   }
 
   #isFree(freeGiftBenefit) {
-    return `${MENU.FREE_OPTION[Math.abs(freeGiftBenefit)]}\n`;
+    return `${GIFT.FREE_OPTION[Math.abs(freeGiftBenefit)]}\n`;
   }
 
   result() {
@@ -37,10 +40,10 @@ class EventProcess {
 
     this.#checkEventAvailable(totalPaid);
     const freeGift = this.#generateFreeGiftDetails(totalPaid);
-    const benefitsDetail = this.#generateAppliedBenefits(totalPaid);
+    const benefitsDetail = this.#generateAppliedBenefits(freeGift);
 
     OutputView.printThis(`<증정 메뉴>\n${this.#isFree(freeGift.benefit)}`);
-    OutputView.printThis(`<혜택 내역>\n${formatOrderDetails(benefitsDetail)}`);
+    OutputView.printThis(`<혜택 내역>\n${formatDetails(benefitsDetail)}`);
 
     return benefitsDetail;
   }

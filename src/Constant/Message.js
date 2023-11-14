@@ -10,6 +10,8 @@ const ERROR = {
   INVALID_ORDER: '[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.',
   EXCEEDED_LIMIT:
     '[ERROR] 5회 이상 잘못 입력하셨습니다. 처음부터 다시 입력하세요.',
+  EXCEEDED_ORDER:
+    '[ERROR] 메뉴는 20개 이상 주문하실 수 없습니다. 처음부터 다시 입력하세요.',
 };
 
 export { MESSAGE, ERROR };
