@@ -2,7 +2,7 @@
 import {
   EVENT, CHRISTMAS, EVERY, SPECIAL, GIFT
 } from '../Constant/Event.js';
-import { DAY } from '../Constant/Index.js';
+import { DAY } from '../Constant/Config.js';
 
 import { getDayofWeeks } from '../Utils/utils.js';
 

@@ -1,45 +1,73 @@
+import { ORDER, REGEX } from '../Constant/Config.js';
 import MENU from '../Constant/Menu.js';
+import { ERROR } from '../Constant/Message.js';
+import { getDayofWeeks, parseStringByDash } from './utils.js';
+
+// 유효한 날짜 입력 체크
+const isInvalidDay = (reserveDay) => Number.isNaN(getDayofWeeks(reserveDay));
+const isNotNumber = (reserveDay) => REGEX.SPECIAL_SYMBOLS.test(reserveDay);
 
 const validateDayInput = (reserveDay) => {
-  if (Number.isNaN(new Date(`2023-12-${reserveDay}`).getDay())) {
-    throw new Error('[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.');
+  if (isInvalidDay(reserveDay)) {
+    throw new Error(ERROR.INVALID_DAY);
   }
-  if (/[!@#$%^&*(),.?":{}|<>]/.test(reserveDay)) {
-    throw new Error('[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.');
+  if (isNotNumber(reserveDay)) {
+    throw new Error(ERROR.INVALID_DAY);
   }
 
   return reserveDay;
 };
 
-const validateOrderInput = (orderMenus) => {
-  const numberForm = /^\d+$/;
-  const orderInfo = orderMenus.split(',').map((el) => el.split('-'));
-
-  console.log(orderMenus);
-  const isNotMenu = orderInfo.some(
+// 유효한 메뉴 입력 체크
+const isNotMenu = (ordersInfo) => {
+  const result = ordersInfo.some(
     ([menu, count]) =>
-      MENU.LIST[menu] === undefined || numberForm.test(count) === false
+      MENU.LIST[menu] === undefined || REGEX.NUMBER.test(count) === false
   );
-  const isOnlyDrinks = orderInfo.every(([menu]) => {
+  return result;
+};
+
+const isOnlyDrinks = (ordersInfo) => {
+  const result = ordersInfo.every(([menu]) => {
     const menuCourse = MENU.CATEGORIES.find((category) =>
       category.list.includes(menu)
     );
     return menuCourse?.name === 'Drinks';
   });
 
-  const menus = orderInfo.map((info) => info[0]);
-  const isDuplicate = menus.length !== new Set(menus).size;
+  return result;
+};
 
-  if (isNotMenu) {
-    throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.');
-  }
-  if (isOnlyDrinks) {
-    throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.');
-  }
+const isDuplicate = (ordersInfo) => {
+  const orderedList = ordersInfo.map((info) => info[ORDER.MENU_NAME]);
 
-  if (isDuplicate) {
-    throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.');
+  return orderedList.length !== new Set(orderedList).size;
+};
+
+const checkValidMenu = (ordersInfo) => {
+  if (isNotMenu(ordersInfo)) {
+    throw new Error(ERROR.INVALID_ORDER);
   }
+};
+
+const checkOnlyDrinks = (ordersInfo) => {
+  if (isOnlyDrinks(ordersInfo)) {
+    throw new Error(ERROR.INVALID_ORDER);
+  }
+};
+
+const checkDuplicate = (ordersInfo) => {
+  if (isDuplicate(ordersInfo)) {
+    throw new Error(ERROR.INVALID_ORDER);
+  }
+};
+
+const validateOrderInput = (orderMenus) => {
+  const ordersInfo = parseStringByDash(orderMenus);
+
+  checkValidMenu(ordersInfo);
+  checkOnlyDrinks(ordersInfo);
+  checkDuplicate(ordersInfo);
 
   return orderMenus;
 };
