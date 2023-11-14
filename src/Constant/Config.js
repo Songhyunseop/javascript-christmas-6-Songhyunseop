@@ -10,6 +10,7 @@ const DAY = {
 const REGEX = {
   SPECIAL_SYMBOLS: /[!@#$%^&*(),.?":{}|<>]/,
   NUMBER: /^\d+$/,
+  STARTS_WITH_ZERO: /^0/,
 };
 
 export { ORDER, DAY, REGEX };

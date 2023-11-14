@@ -2,6 +2,7 @@
 import { MissionUtils } from '@woowacourse/mission-utils';
 import OrderProcess from '../src/Controller/OrderController';
 import InputView from '../src/View/InputView';
+import { ERROR } from '../src/Constant/Message';
 
 const mockQuestions = (inputs) => {
   MissionUtils.Console.readLineAsync = jest.fn();
@@ -20,21 +21,31 @@ const getLogSpy = () => {
   return logSpy;
 };
 
-test.each([
-  ['AB', '티본스테이크-1'],
-  ['#$@', '티본스테이크-1'],
-])('숫자 이외의 값 입력할 경우', async ([reserveDay, orderMenus]) => {
-  mockQuestions([reserveDay, orderMenus]);
-  const logSpy = getLogSpy();
+describe('잘못된 날자 입력에 대한 예외처리', () => {
+  test.each([
+    ['AB', '티본스테이크-1'],
+    ['#$@', '티본스테이크-1'],
+  ])('숫자 이외의 값 입력할 경우', async ([reserveDay, orderMenus]) => {
+    mockQuestions([reserveDay, orderMenus]);
+    const logSpy = getLogSpy();
 
-  const orderController = new OrderProcess();
+    const orderController = new OrderProcess();
 
-  await expect(orderController.readReservationInput()).rejects.toThrowError(
-    '[ERROR] 5회 이상 잘못 입력하셨습니다. 처음부터 다시 입력하세요.'
-  );
-  expect(logSpy).toHaveBeenCalledWith(
-    '[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.'
-  );
+    await expect(orderController.readReservationInput()).rejects.toThrowError(
+      ERROR.EXCEEDED_LIMIT
+    );
+    expect(logSpy).toHaveBeenCalledWith(ERROR.INVALID_DAY);
+  });
+
+  test('잘못된 형식의 숫자 입력할 경우', async () => {
+    mockQuestions(['009', '바비큐립-1']);
+    const logSpy = getLogSpy();
+
+    const orderController = new OrderProcess();
+    await expect(orderController.readReservationInput()).rejects.toThrowError(
+      ERROR.EXCEEDED_LIMIT
+    );
+  });
 });
 
 describe('잘못된 메뉴 입력에 대한 예외처리', () => {
@@ -45,9 +56,7 @@ describe('잘못된 메뉴 입력에 대한 예외처리', () => {
     const orderController = new OrderProcess();
     await expect(orderController.readReservationInput()).rejects.toThrowError();
 
-    expect(logSpy).toHaveBeenCalledWith(
-      '[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.'
-    );
+    expect(logSpy).toHaveBeenCalledWith(ERROR.INVALID_ORDER);
   });
 
   test('음료만 주문한 경우', async () => {
@@ -56,9 +65,7 @@ describe('잘못된 메뉴 입력에 대한 예외처리', () => {
 
     const orderController = new OrderProcess();
     await expect(orderController.readReservationInput()).rejects.toThrowError();
-    expect(logSpy).toHaveBeenCalledWith(
-      '[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.'
-    );
+    expect(logSpy).toHaveBeenCalledWith(ERROR.INVALID_ORDER);
   });
 
   test('잘못된 주문개수를 입력할 경우', async () => {
@@ -68,9 +75,7 @@ describe('잘못된 메뉴 입력에 대한 예외처리', () => {
     const orderController = new OrderProcess();
     await expect(orderController.readReservationInput()).rejects.toThrowError();
 
-    expect(logSpy).toHaveBeenCalledWith(
-      '[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.'
-    );
+    expect(logSpy).toHaveBeenCalledWith(ERROR.INVALID_ORDER);
   });
 
   test('같은 메뉴를 중복 주문할 경우', async () => {
@@ -80,9 +85,7 @@ describe('잘못된 메뉴 입력에 대한 예외처리', () => {
     const orderController = new OrderProcess();
     await expect(orderController.readReservationInput()).rejects.toThrowError();
 
-    expect(logSpy).toHaveBeenCalledWith(
-      '[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.'
-    );
+    expect(logSpy).toHaveBeenCalledWith(ERROR.INVALID_ORDER);
   });
 });
 
@@ -112,16 +115,8 @@ describe('입력날짜와 주문메뉴 입력에 대한 결과처리', () => {
   });
 
   test.each([
-    [
-      'AB',
-      '티본스테이크-1',
-      '[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.',
-    ],
-    [
-      '3',
-      '티본스테이크1개',
-      '[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.',
-    ],
+    ['AB', '티본스테이크-1', ERROR.INVALID_DAY],
+    ['3', '티본스테이크1개', ERROR.INVALID_ORDER],
   ])(
     '잘못된 날짜 입력할 경우',
     async (reserveDay, orderMenus, expectedError) => {

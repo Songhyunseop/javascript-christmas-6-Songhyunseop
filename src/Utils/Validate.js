@@ -6,12 +6,16 @@ import { getDayofWeeks, parseStringByDash } from './utils.js';
 // 유효한 날짜 입력 체크
 const isInvalidDay = (reserveDay) => Number.isNaN(getDayofWeeks(reserveDay));
 const isNotNumber = (reserveDay) => REGEX.SPECIAL_SYMBOLS.test(reserveDay);
+const isStartWithZero = (reserveDay) => REGEX.STARTS_WITH_ZERO.test(reserveDay);
 
 const validateDayInput = (reserveDay) => {
   if (isInvalidDay(reserveDay)) {
     throw new Error(ERROR.INVALID_DAY);
   }
   if (isNotNumber(reserveDay)) {
+    throw new Error(ERROR.INVALID_DAY);
+  }
+  if (isStartWithZero(reserveDay)) {
     throw new Error(ERROR.INVALID_DAY);
   }
 
