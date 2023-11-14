@@ -1,3 +1,6 @@
+import { EVENT, CHRISTMAS, EVERY, SPECIAL, GIFT } from '../Constant/Event';
+import { getDayofWeeks } from '../Utils/utils';
+
 class Event {
   constructor(day, courses) {
     this.day = Number(day);
@@ -5,54 +8,85 @@ class Event {
   }
 
   checkAvailable(totalPaid) {
-    if (totalPaid < 10000) return new Event('NO_EVENT', this.courses);
+    if (totalPaid < EVENT.MIN_PAID) {
+      return new Event(EVENT.NO_BENEFIT, this.courses);
+    }
     return this;
   }
 
-  christMasDay() {
-    if (this.day !== 'NO_EVENT' && this.day <= 25) {
-      const result = -(1000 + (this.day - 1) * 100);
+  // 크리스마스 이벤트
+  #isChristmasEvent(day) {
+    return day !== EVENT.NO_BENEFIT && day <= CHRISTMAS.END;
+  }
 
-      return { name: '크리스마스 디데이 할인', result };
+  christmasDay() {
+    if (this.#isChristmasEvent(this.day)) {
+      const result = -(
+        CHRISTMAS.BASE_DISCOUNT +
+        (this.day - 1) * CHRISTMAS.DISCOUNT
+      );
+
+      return { name: EVENT.CHRISTMAS, result };
     }
-    return 'NO_EVENT';
+    return EVENT.NO_BENEFIT;
+  }
+
+  // 평일, 주말 이벤트
+  #isEveryDayEvent() {
+    return this.day !== EVENT.NO_BENEFIT;
+  }
+
+  #isWeeks() {
+    const dayofWeek = getDayofWeeks(this.day);
+    if (dayofWeek > 5) return true;
+    return false;
+  }
+
+  #calculateWeeksBenefit() {
+    const result = -(this.courses.Main * EVERY.DISCOUNT);
+    return { name: EVENT.EVERY_WEEKS, result };
+  }
+
+  #calculateWeekendBenefit() {
+    const result = -(this.courses.Dessert * EVERY.DISCOUNT);
+    return { name: EVENT.EVERY_WEEKEND, result };
+  }
+
+  #checkEveryEventBenefit() {
+    if (this.#isWeeks()) return this.#calculateWeeksBenefit();
+
+    return this.#calculateWeekendBenefit();
   }
 
   everyDay() {
-    if (this.day !== 'NO_EVENT') {
-      const dayOfWeek = new Date(`2023-12-${this.day}`).getDay();
+    if (this.#isEveryDayEvent()) return this.#checkEveryEventBenefit();
 
-      if (dayOfWeek <= 5) {
-        const result = -(this.courses.Dessert * 2023);
-        return { name: '평일 할인', result };
-      }
-      if (dayOfWeek > 5) {
-        const result = -(this.courses.Main * 2023);
-        return { name: '주말 할인', result };
-      }
-    }
+    return EVENT.NO_BENEFIT;
+  }
 
-    return 'NO_EVENT';
+  // 특별할인 이벤트
+  #isSpecialdayEvent() {
+    return SPECIAL.DAYS.find((day) => day === this.day);
   }
 
   specialDay() {
-    const specials = [3, 10, 17, 24, 25, 31];
-
-    if (specials.find((day) => day === this.day)) {
-      return { name: '특별 할인', result: -1000 };
+    if (this.#isSpecialdayEvent()) {
+      return { name: EVENT.SPECIAL, result: SPECIAL.DISCOUNT };
     }
-    return 'NO_EVENT';
+    return EVENT.NO_BENEFIT;
   }
 
-  // 증정품 여부 체크
+  // 증정품 이벤트
   hasFreeMenu(total) {
-    if (total >= 120000) return { name: '증정 이벤트', result: -25000 };
+    if (total >= GIFT.MIN_PAID) {
+      return { name: EVENT.GIFT, result: GIFT.REWARD };
+    }
     return { result: 0 };
   }
 
-  getCheckedEventTotal(totalPaid) {
+  getTotalChecked(totalPaid) {
     const eventCheckMethods = [
-      this.christMasDay.bind(this),
+      this.christmasDay.bind(this),
       this.everyDay.bind(this),
       this.specialDay.bind(this),
       () => this.hasFreeMenu(totalPaid),

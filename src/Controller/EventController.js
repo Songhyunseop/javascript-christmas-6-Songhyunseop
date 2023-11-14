@@ -24,7 +24,7 @@ class EventProcess {
   }
 
   #generateAppliedBenefits(isFreeGift) {
-    const BenefitsDetail = this.event.getCheckedEventTotal(isFreeGift);
+    const BenefitsDetail = this.event.getTotalChecked(isFreeGift);
     return BenefitsDetail;
   }
 

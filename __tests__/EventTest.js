@@ -6,8 +6,8 @@ describe('Event 클래스 unit 테스트', () => {
     const day = 15;
     const answer = { name: '크리스마스 디데이 할인', result: -2400 };
 
-    const event = new Event(day, null);
-    const result = event.christMasDay();
+    const event = new Event(day);
+    const result = event.christmasDay();
 
     expect(result).toEqual(expect.objectContaining(answer));
   });
@@ -82,7 +82,7 @@ describe('Event 클래스 unit 테스트', () => {
       { name: '증정 이벤트', result: -25000 },
     ];
     const event = new Event(day, courses);
-    const result = event.getCheckedEventTotal(totalPaid);
+    const result = event.getTotalChecked(totalPaid);
 
     answer.forEach((el, idx) => {
       expect(result[idx]).toEqual(el);

@@ -1,5 +1,6 @@
 const isArrayEmpty = (array) => {
   if (array.length === 0) return true;
+  return false;
 };
 
 const formatOrderDetails = (details) => {
@@ -17,4 +18,11 @@ const parseStringByDash = (string) => {
 
   return result;
 };
-export { formatOrderDetails, parseStringByDash };
+
+const getDayofWeeks = (day) => {
+  const dayOfWeek = new Date(`2023-12-${day}`).getDay();
+
+  return dayOfWeek;
+};
+
+export { formatOrderDetails, parseStringByDash, getDayofWeeks };
