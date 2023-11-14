@@ -47,7 +47,6 @@ class OrderProcess {
 
   async result() {
     const { reserveDay, orderMenus } = await this.readReservationInput();
-    console.log('여기 undefined됨');
     const { orderedList, totalPaid } = this.#generateOrderDetails(orderMenus);
 
     OutputView.printThis(`<주문 메뉴>\n${orderedList}\n`);

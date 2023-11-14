@@ -14,13 +14,23 @@ const validateDayInput = (reserveDay) => {
 const validateOrderInput = (orderMenus) => {
   const numberForm = /^\d+$/;
   const orderInfo = orderMenus.split(',').map((el) => el.split('-'));
+
   const isNotMenu = orderInfo.some(
     ([menu, count]) =>
       MENU.LIST[menu] === undefined || numberForm.test(count) === false
   );
+  const isOnlyDrinks = orderInfo.every(([menu]) => {
+    const menuCourse = MENU.CATEGORIES.find((category) =>
+      category.list.includes(menu)
+    );
+    return menuCourse?.name === 'Drinks';
+  });
 
   if (isNotMenu) {
     throw new Error('[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.');
+  }
+  if (isOnlyDrinks) {
+    throw new Error('[ERROR] 음료만 주문할 수 없습니다. 다시 입력해 주세요.');
   }
 
   return orderMenus;
