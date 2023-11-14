@@ -12,8 +12,9 @@ const formatOrderDetails = (details) => {
   return result;
 };
 
-const funcccc = () => {
-  console.log('hello');
-};
+const parseStringByDash = (string) => {
+  const result = string.split(',').map((el) => el.split('-'));
 
-export { formatOrderDetails, funcccc };
+  return result;
+};
+export { formatOrderDetails, parseStringByDash };

@@ -11,7 +11,7 @@ class EventProcess {
   }
 
   #checkEventAvailable(totalPaid) {
-    const courses = this.order.courseType();
+    const courses = this.order.getMenuCourse();
     const event = new Event(this.day, courses);
 
     this.event = event.checkAvailable(totalPaid);

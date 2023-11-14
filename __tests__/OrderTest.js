@@ -16,11 +16,12 @@ describe('Order 클래스 unit 테스트', () => {
 
   test('총 주문 합계 금액 반환', () => {
     const menu = '해산물파스타-2,초코케이크-1';
+    const totalAmount = 85000;
 
     const order = new Order(menu);
     const result = order.totalAmount();
 
-    expect(result).toBe(85000);
+    expect(result).toBe(totalAmount);
   });
 
   test('각 주문메뉴들의 코스타입 반환', () => {
@@ -32,7 +33,7 @@ describe('Order 클래스 unit 테스트', () => {
       Main: 2,
     };
     const order = new Order(menu);
-    const result = order.courseType();
+    const result = order.getMenuCourse();
 
     expect(result).toEqual(expect.objectContaining(answer));
   });
