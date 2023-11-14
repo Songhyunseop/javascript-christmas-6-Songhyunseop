@@ -20,6 +20,7 @@ const REGEX = Object.freeze({
   SPECIAL_SYMBOLS: /[!@#$%^&*(),.?":{}|<>]/,
   NUMBER: /^\d+$/,
   STARTS_WITH_ZERO: /^0/,
+  EMPTY: /^\s*$/,
 });
 
 // prettier-ignore

@@ -40,20 +40,23 @@ describe('잘못된 날짜 입력에 대한 예외처리', () => {
   });
 
   test('잘못된 형식의 숫자 입력할 경우', async () => {
+    const logSpy = getLogSpy();
     mockQuestions(['009', '바비큐립-1']);
 
     const orderController = new OrderProcess();
-    await expect(orderController.readReservationInput()).rejects.toThrowError(
-      ERROR.EXCEEDED_LIMIT
-    );
+
+    await expect(orderController.readReservationInput()).rejects.toThrowError();
+    expect(logSpy).toHaveBeenCalledWith(ERROR.INVALID_DAY);
   });
 
   test('빈 공백을 입력할 경우', async () => {
-    mockQuestions([]);
+    const logSpy = getLogSpy();
+    mockQuestions(['', '바비큐립-1']);
+
     const orderController = new OrderProcess();
-    await expect(orderController.readReservationInput()).rejects.toThrowError(
-      ERROR.INVALID_DAY
-    );
+    await expect(orderController.readReservationInput()).rejects.toThrow();
+
+    expect(logSpy).toHaveBeenCalledWith(ERROR.INVALID_DAY);
   });
 });
 
