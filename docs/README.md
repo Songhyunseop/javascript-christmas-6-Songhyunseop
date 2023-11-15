@@ -26,7 +26,7 @@
 - 예약일과 주문메뉴를 선택하면 이번 프로모션의 이벤트 정책에 맞춰 적용받게 되는 모든 혜택과 할인내역을 제공합니다.<br>
 
 - 각 이벤트 적용 대상은 아래와 같습니다.<br>
-  **크리스마스 디데이 할인** : 12.01-12.25 간진행, 1일 1000원으로 시작, 매일 100원씩 추가할인<br>
+  **크리스마스 디데이 할인** : 12.01-12.25 간 진행, 1일 1000원으로 시작, 매일 100원씩 추가할인<br>
   **평일할인(일-목요일)** : 디저트 메뉴 1개당 2,023원 할인<br>
   **주말할인(금,토요일)** : 메인 메뉴 1개당 2,023원 할인<br>
   **특별할인(3,10,17,24,25,31일)** : 해당 날짜 예약 시 총 주문금액에서 1000원 할인<br>
@@ -44,7 +44,7 @@
 - 아래 명령어로 로컬 경로에 폴더 복제
 
 ```
-git clone https://github.com/Songhyunseop/javascript-lotto-6.git
+git clone https://github.com/Songhyunseop/javascript-christmas-6-Songhyunseop.git
 ```
 
 <br><br>
@@ -165,7 +165,10 @@ npm install
  ┃ ┗ 📜OrderController.js
  ┣ 📂Model
  ┃ ┣ 📜Benefit.js
+ ┃ ┣ 📜EvenctChristmas.js
  ┃ ┣ 📜Event.js
+ ┃ ┣ 📜EventEvery.js
+ ┃ ┣ 📜EventSpecial.js
  ┃ ┗ 📜Order.js
  ┣ 📂Utils
  ┃ ┣ 📜Factory.js

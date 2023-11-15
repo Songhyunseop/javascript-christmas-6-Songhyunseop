@@ -31,8 +31,8 @@ class Event {
     return discountResult.filter((amount) => amount.benefit);
   }
 
-  getTotalChecked(arr) {
-    const result = arr.map((checkEvent) => checkEvent());
+  getTotalChecked(eventCheckFuncs) {
+    const result = eventCheckFuncs.map((checkEvent) => checkEvent());
 
     return this.#getDiscountResults(result);
   }
