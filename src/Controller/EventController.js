@@ -4,9 +4,6 @@ import OutputView from '../View/OutputView.js';
 import { formatDetails } from '../Utils/utils.js';
 import { GIFT } from '../Constant/Event.js';
 import Factory from '../Utils/Factory.js';
-import EventChristmas from '../Model/EvenctChristmas.js';
-import EventEvery from '../Model/EventEvery.js';
-import EventSpecial from '../Model/EventSpecial.js';
 
 class EventProcess {
   #day;

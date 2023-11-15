@@ -2,9 +2,6 @@ import OrderProcess from './Controller/OrderController.js';
 import EventProcess from './Controller/EventController.js';
 import BenefitProcess from './Controller/BenefitController.js';
 
-import Order from './Model/Order.js';
-import Benefits from './Model/Benefit.js';
-
 import OutputView from './View/OutputView.js';
 import Factory from './Utils/Factory.js';
 

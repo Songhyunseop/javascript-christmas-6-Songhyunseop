@@ -2,7 +2,7 @@ import InputView from '../View/InputView.js';
 import OutputView from '../View/OutputView.js';
 
 import { TRY_TIMES } from '../Constant/Config.js';
-import { ERROR } from '../Constant/Message.js';
+import { ERROR, MESSAGE } from '../Constant/Message.js';
 
 import validateDayInput from '../Utils/ValidateDayInput.js';
 import validateOrderInput from '../Utils/ValidateMenuInput.js';
@@ -53,8 +53,9 @@ class OrderProcess {
 
   async result() {
     const { reserveDay, orderMenus } = await this.readReservationInput();
-    const { orderedList, totalPaid } = this.#generateOrderDetails(orderMenus);
+    OutputView.printThis(MESSAGE.BENEFIT_INFO);
 
+    const { orderedList, totalPaid } = this.#generateOrderDetails(orderMenus);
     OutputView.printThis(`<주문 메뉴>\n${orderedList}\n`);
     OutputView.printThis(
       `<할인 전 총주문 금액>\n${formatAmount(totalPaid)}원\n`
