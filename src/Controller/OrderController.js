@@ -26,19 +26,27 @@ class OrderProcess {
       orderMenus = validateOrderInput(await InputView.readMenu());
     } catch (error) {
       OutputView.printThis(error.message);
-      const result = await this.#countRetryTimes();
+      const result = await this.#retryReadReservation();
       return result;
     }
     this.#tryCount = 0;
     return { reserveDay, orderMenus };
   }
 
-  async #countRetryTimes() {
+  #isRetry() {
     if (this.#tryCount < TRY_TIMES.LIMIT) {
       this.#tryCount += 1;
+      return true;
+    }
+    return false;
+  }
+
+  async #retryReadReservation() {
+    if (this.#isRetry()) {
       const result = await this.readReservationInput();
       return result;
     }
+
     throw new Error(ERROR.EXCEEDED_LIMIT);
   }
 

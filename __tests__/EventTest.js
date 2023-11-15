@@ -132,24 +132,20 @@ describe('Event 클래스 unit 테스트', () => {
   });
 
   describe('각 이벤트 체크결과에 대한 혜택내역 반환', () => {
-    let day;
-    let courses;
-    let input;
-    beforeEach(() => {
-      day = 25;
-      courses = {
-        Appetizer: 0,
-        Main: 2,
-        Dessert: 1,
-        Drinks: 2,
-      };
-      input = [
-        () => ({ name: '크리스마스 디데이 할인', benefit: -3400 }),
-        () => ({ name: '평일 할인', benefit: -2023 }),
-        () => ({ name: '특별 할인', benefit: -1000 }),
-        () => ({ name: '증정 이벤트', benefit: -25000 }),
-      ];
-    });
+    const day = 25;
+    const courses = {
+      Appetizer: 0,
+      Main: 2,
+      Dessert: 1,
+      Drinks: 2,
+    };
+    const input = [
+      () => ({ name: '크리스마스 디데이 할인', benefit: -3400 }),
+      () => ({ name: '평일 할인', benefit: -2023 }),
+      () => ({ name: '특별 할인', benefit: -1000 }),
+      () => ({ name: '증정 이벤트', benefit: -25000 }),
+    ];
+
     test('적용된 이벤트 혜택 내역 반환', () => {
       const event = new Event(day, courses);
       const result = event.getTotalChecked(input);
