@@ -12,15 +12,12 @@ const formatAmount = (amount) => new Intl.NumberFormat('en-US').format(amount);
 
 // 각 객체의 key, value를 한 쌍의 문자열로 변환
 const formatDetails = (details) => {
-  if (isArrayEmpty(details)) return '없음\n';
+  if (isArrayEmpty(details)) return BENEFIT.NO_DISCOUNT;
 
   const detailsArray = convertObjectToArray(details);
 
   const result = `${detailsArray
-    .map(
-      (detail) =>
-        `${detail[BENEFIT.NAME]}: ${formatAmount(detail[BENEFIT.AMOUNT])}원`
-    )
+    .map((detail) => `${detail[0]}: ${formatAmount(detail[1])}원`)
     .join('\n')}\n`;
 
   return result;

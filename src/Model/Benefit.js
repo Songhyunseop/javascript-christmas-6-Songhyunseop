@@ -1,4 +1,4 @@
-import { BADGE, BENEFIT } from '../Constant/Benefit.js';
+import { BADGE, BADGE_BENEFIT } from '../Constant/Benefit.js';
 
 class Benefits {
   #totalBenefit;
@@ -26,15 +26,15 @@ class Benefits {
 
   // 혜택에 대한 뱃지 결과
   #isSantaBadge() {
-    return Math.abs(this.#totalBenefit) >= BENEFIT.MAX;
+    return Math.abs(this.#totalBenefit) >= BADGE_BENEFIT.MAX;
   }
 
   #isTreeBadge() {
-    return Math.abs(this.#totalBenefit) >= BENEFIT.MID;
+    return Math.abs(this.#totalBenefit) >= BADGE_BENEFIT.MID;
   }
 
   #isStarBadge() {
-    return Math.abs(this.#totalBenefit) >= BENEFIT.MIN;
+    return Math.abs(this.#totalBenefit) >= BADGE_BENEFIT.MIN;
   }
 
   returnBadge() {

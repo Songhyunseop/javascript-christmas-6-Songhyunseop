@@ -6,6 +6,7 @@ const ORDER = Object.freeze({
 const BENEFIT = Object.freeze({
   NAME: 0,
   AMOUNT: 1,
+  NO_DISCOUNT: '없음\n',
 });
 
 const DAY = Object.freeze({

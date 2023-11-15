@@ -1,15 +1,54 @@
 /* eslint-disable max-lines-per-function */
 import { EVENT } from '../src/Constant/Event';
+import EventChristmas from '../src/Model/EvenctChristmas';
 import Event from '../src/Model/Event';
+import EventEvery from '../src/Model/EventEvery';
+import EventSpecial from '../src/Model/EventSpecial';
 
 describe('Event 클래스 unit 테스트', () => {
+  describe('주문 금액에 따라 이벤트 적용가능 여부 체크', () => {
+    test('주문 금액 10000원 이상일 시 이벤트 적용', () => {
+      const totalPaid = 15000;
+      const day = 25;
+      const courses = {
+        Appetizer: 0,
+        Main: 2,
+        Dessert: 1,
+        Drinks: 2,
+      };
+
+      const event = new Event(day, courses);
+      const result = event.checkAvailable(totalPaid);
+
+      expect(result instanceof Event).toBe(true);
+      expect(result.day).toBe(25);
+    });
+
+    test('주문 금액 10000원 미만일 시 이벤트 미적용', () => {
+      const totalPaid = 8000;
+      const day = 25;
+      const courses = {
+        Appetizer: 0,
+        Main: 2,
+        Dessert: 1,
+        Drinks: 2,
+      };
+
+      const event = new Event(day, courses);
+      const result = event.checkAvailable(totalPaid);
+
+      expect(result instanceof Event).toBe(true);
+      expect(result.day).toBe(EVENT.NO_BENEFIT_DAY);
+    });
+  });
+
   describe('크리스마스 이벤트 체크', () => {
     test('12월 1일~25일 내에 주문 시 크리스마스 이벤트 적용', () => {
       const day = 15;
       const answer = { name: EVENT.CHRISTMAS, benefit: -2400 };
 
-      const event = new Event(day);
-      const result = event.checkChristmas();
+      const event = new EventChristmas(day);
+      const result = event.checkAvailable();
 
       expect(result).toEqual(expect.objectContaining(answer));
     });
@@ -18,8 +57,8 @@ describe('Event 클래스 unit 테스트', () => {
       const day = 30;
       const answer = EVENT.NO_BENEFIT_DAY;
 
-      const event = new Event(day);
-      const result = event.checkChristmas();
+      const event = new EventChristmas(day);
+      const result = event.checkAvailable();
 
       expect(result).toEqual(answer);
     });
@@ -36,8 +75,8 @@ describe('Event 클래스 unit 테스트', () => {
       };
       const answer = { name: '평일 할인', benefit: -6069 };
 
-      const event = new Event(day, orders);
-      const result = event.checkEveryDay();
+      const event = new EventEvery(day, orders);
+      const result = event.checkAvailable();
 
       expect(result).toEqual(expect.objectContaining(answer));
     });
@@ -52,8 +91,8 @@ describe('Event 클래스 unit 테스트', () => {
       };
       const answer = { name: '주말 할인', benefit: -10115 };
 
-      const event = new Event(day, orders);
-      const result = event.checkEveryDay();
+      const event = new EventEvery(day, orders);
+      const result = event.checkAvailable();
 
       expect(result).toEqual(expect.objectContaining(answer));
     });
@@ -63,8 +102,8 @@ describe('Event 클래스 unit 테스트', () => {
     const day = 3;
     const answer = { name: '특별 할인', benefit: -1000 };
 
-    const event = new Event(day, null);
-    const result = event.checkSpecialDay();
+    const event = new EventSpecial(day, null);
+    const result = event.checkAvailable();
 
     expect(result).toEqual(expect.objectContaining(answer));
   });
@@ -80,7 +119,7 @@ describe('Event 클래스 unit 테스트', () => {
   describe('각 이벤트 체크결과에 대한 혜택내역 반환', () => {
     let day;
     let courses;
-    let answer;
+    let input;
     beforeEach(() => {
       day = 25;
       courses = {
@@ -89,31 +128,20 @@ describe('Event 클래스 unit 테스트', () => {
         Dessert: 1,
         Drinks: 2,
       };
-      answer = [
-        { name: '크리스마스 디데이 할인', benefit: -3400 },
-        { name: '평일 할인', benefit: -2023 },
-        { name: '특별 할인', benefit: -1000 },
-        { name: '증정 이벤트', benefit: -25000 },
+      input = [
+        () => ({ name: '크리스마스 디데이 할인', benefit: -3400 }),
+        () => ({ name: '평일 할인', benefit: -2023 }),
+        () => ({ name: '특별 할인', benefit: -1000 }),
+        () => ({ name: '증정 이벤트', benefit: -25000 }),
       ];
     });
     test('적용된 이벤트 혜택 내역 반환', () => {
-      const freeGift = { name: '증정 이벤트', benefit: -25000 };
-
       const event = new Event(day, courses);
-      const result = event.getTotalChecked(freeGift);
+      const result = event.getTotalChecked(input);
+
+      const answer = input.map((el) => el());
 
       expect(result).toEqual(answer);
-    });
-
-    test('각 혜택 목록에 증정품 있을 시 내역에 증정품 추가하여 반환', () => {
-      const freeGift = answer[3];
-
-      const event = new Event(day, courses);
-      const result = event.getTotalChecked(freeGift);
-
-      answer.forEach((el, idx) => {
-        expect(result[idx]).toEqual(el);
-      });
     });
   });
 });

@@ -4,6 +4,9 @@ import OutputView from '../View/OutputView.js';
 import { formatDetails } from '../Utils/utils.js';
 import { GIFT } from '../Constant/Event.js';
 import Factory from '../Utils/Factory.js';
+import EventChristmas from '../Model/EvenctChristmas.js';
+import EventEvery from '../Model/EventEvery.js';
+import EventSpecial from '../Model/EventSpecial.js';
 
 class EventProcess {
   #day;
@@ -28,7 +31,13 @@ class EventProcess {
   }
 
   #generateAppliedBenefits(freeGift) {
-    const BenefitsDetail = this.event.getTotalChecked(freeGift);
+    const courses = this.order.getMenuCourse();
+    const eventCheckFunc = Factory.checkAllEvent(this.#day, courses);
+
+    const BenefitsDetail = this.event.getTotalChecked([
+      ...eventCheckFunc,
+      () => freeGift,
+    ]);
 
     return BenefitsDetail;
   }

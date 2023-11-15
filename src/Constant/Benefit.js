@@ -5,10 +5,10 @@ const BADGE = Object.freeze({
   NOTHING: '없음',
 });
 
-const BENEFIT = {
+const BADGE_BENEFIT = Object.freeze({
   MAX: 20000,
   MID: 10000,
   MIN: 5000,
-};
+});
 
-export { BADGE, BENEFIT };
+export { BADGE, BADGE_BENEFIT };
