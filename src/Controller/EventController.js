@@ -6,15 +6,17 @@ import { GIFT } from '../Constant/Event.js';
 import Factory from '../Utils/Factory.js';
 
 class EventProcess {
+  #day;
+
   constructor(reserveDay, order) {
-    this.day = Number(reserveDay);
+    this.#day = Number(reserveDay);
     this.order = order;
     this.event = null;
   }
 
   #checkEventAvailable(totalPaid) {
     const courses = this.order.getMenuCourse();
-    const event = Factory.createEvent(this.day, courses);
+    const event = Factory.createEvent(this.#day, courses);
 
     this.event = event.checkAvailable(totalPaid);
   }

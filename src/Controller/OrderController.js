@@ -8,8 +8,10 @@ import InputView from '../View/InputView.js';
 import OutputView from '../View/OutputView.js';
 
 class OrderProcess {
+  #tryCount;
+
   constructor() {
-    this.tryCount = 0;
+    this.#tryCount = 0;
   }
 
   // 입력값 확인 메서드
@@ -25,13 +27,13 @@ class OrderProcess {
       const result = await this.#countRetryTimes();
       return result;
     }
-    this.tryCount = 0;
+    this.#tryCount = 0;
     return { reserveDay, orderMenus };
   }
 
   async #countRetryTimes() {
-    if (this.tryCount < TRY_TIMES.LIMIT) {
-      this.tryCount += 1;
+    if (this.#tryCount < TRY_TIMES.LIMIT) {
+      this.#tryCount += 1;
       const result = await this.readReservationInput();
       return result;
     }

@@ -7,25 +7,29 @@ import { DAY } from '../Constant/Config.js';
 import { getDayofWeeks } from '../Utils/utils.js';
 
 class Event {
+  #day;
+
+  #courses;
+
   constructor(day, courses) {
-    this.day = day;
-    this.courses = courses;
+    this.#day = day;
+    this.#courses = courses;
   }
 
   checkAvailable(totalPaid) {
     if (totalPaid < EVENT.MIN_PAID) {
-      return new Event(EVENT.NO_BENEFIT_DAY, this.courses);
+      return new Event(EVENT.NO_BENEFIT_DAY, this.#courses);
     }
     return this;
   }
 
   // 크리스마스 이벤트 체크
   #isChristmas() {
-    return this.day !== EVENT.NO_BENEFIT_DAY && this.day <= CHRISTMAS.END;
+    return this.#day !== EVENT.NO_BENEFIT_DAY && this.#day <= CHRISTMAS.END;
   }
 
   #calculateChristmasDiscount() {
-    return CHRISTMAS.BASE_DISCOUNT + (this.day - 1) * CHRISTMAS.DISCOUNT;
+    return CHRISTMAS.BASE_DISCOUNT + (this.#day - 1) * CHRISTMAS.DISCOUNT;
   }
 
   checkChristmas() {
@@ -38,22 +42,22 @@ class Event {
 
   // 평일, 주말 이벤트 체크
   #isEveryDay() {
-    return this.day !== EVENT.NO_BENEFIT_DAY;
+    return this.#day !== EVENT.NO_BENEFIT_DAY;
   }
 
   #isWeeks() {
-    const dayofWeek = getDayofWeeks(this.day);
+    const dayofWeek = getDayofWeeks(this.#day);
     if (dayofWeek > DAY.WEEKDAY_END) return true;
     return false;
   }
 
   #calculateWeeksBenefit() {
-    const benefit = -(this.courses.Main * EVERY.DISCOUNT);
+    const benefit = -(this.#courses.Main * EVERY.DISCOUNT);
     return { name: EVENT.EVERY_WEEKEND, benefit };
   }
 
   #calculateWeekendBenefit() {
-    const benefit = -(this.courses.Dessert * EVERY.DISCOUNT);
+    const benefit = -(this.#courses.Dessert * EVERY.DISCOUNT);
     return { name: EVENT.EVERY_WEEKS, benefit };
   }
 
@@ -71,7 +75,7 @@ class Event {
 
   // 특별할인 이벤트 체크
   #isSpecialday() {
-    return SPECIAL.DAYS.find((day) => day === this.day);
+    return SPECIAL.DAYS.find((day) => day === this.#day);
   }
 
   checkSpecialDay() {
