@@ -26,7 +26,7 @@ const checkStartWithZero = (reserveDay) => {
     throw new Error(ERROR.INVALID_DAY);
   }
 };
-const checkIsEmpty = (reserveDay) => {
+const checkEmptyOrWhiteSpace = (reserveDay) => {
   if (isEmptyorWhiteSpace(reserveDay)) {
     throw new Error(ERROR.INVALID_DAY);
   }
@@ -36,7 +36,7 @@ const validateDayInput = (reserveDay) => {
   checkValidDay(reserveDay);
   checkNumberType(reserveDay);
   checkStartWithZero(reserveDay);
-  checkIsEmpty(reserveDay);
+  checkEmptyOrWhiteSpace(reserveDay);
 
   return reserveDay;
 };
