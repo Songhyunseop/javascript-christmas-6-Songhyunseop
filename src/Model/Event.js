@@ -49,12 +49,12 @@ class Event {
 
   #calculateWeeksBenefit() {
     const benefit = -(this.courses.Main * EVERY.DISCOUNT);
-    return { name: EVENT.EVERY_WEEKS, benefit };
+    return { name: EVENT.EVERY_WEEKEND, benefit };
   }
 
   #calculateWeekendBenefit() {
     const benefit = -(this.courses.Dessert * EVERY.DISCOUNT);
-    return { name: EVENT.EVERY_WEEKEND, benefit };
+    return { name: EVENT.EVERY_WEEKS, benefit };
   }
 
   #checkEveryBenefit() {

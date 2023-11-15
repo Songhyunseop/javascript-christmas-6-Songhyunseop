@@ -1,7 +1,8 @@
 import { TRY_TIMES } from '../Constant/Config.js';
 import { ERROR } from '../Constant/Message.js';
 import Factory from '../Utils/Factory.js';
-import { validateDayInput, validateOrderInput } from '../Utils/Validate.js';
+import validateDayInput from '../Utils/ValidateDayInput.js';
+import validateOrderInput from '../Utils/ValidateMenuInput.js';
 import { formatAmount } from '../Utils/utils.js';
 import InputView from '../View/InputView.js';
 import OutputView from '../View/OutputView.js';
