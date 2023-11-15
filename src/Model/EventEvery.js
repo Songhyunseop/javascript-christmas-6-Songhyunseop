@@ -19,7 +19,7 @@ class EventEvery extends Event {
     return this.#day !== EVENT.NO_BENEFIT_DAY;
   }
 
-  #isWeeks() {
+  #isWeekend() {
     const dayofWeek = getDayofWeeks(this.#day);
     if (dayofWeek > DAY.WEEKDAY_END) return true;
     return false;
@@ -36,7 +36,7 @@ class EventEvery extends Event {
   }
 
   #checkEventBenefit() {
-    if (this.#isWeeks()) return this.#calculateWeeksBenefit();
+    if (this.#isWeekend()) return this.#calculateWeeksBenefit();
 
     return this.#calculateWeekendBenefit();
   }
