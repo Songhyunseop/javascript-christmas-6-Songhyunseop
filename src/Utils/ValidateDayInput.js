@@ -7,7 +7,8 @@ import { getDayofWeeks } from './utils.js';
 const isInvalidDay = (reserveDay) => Number.isNaN(getDayofWeeks(reserveDay));
 const isNotNumber = (reserveDay) => REGEX.SPECIAL_SYMBOLS.test(reserveDay);
 const isStartWithZero = (reserveDay) => REGEX.STARTS_WITH_ZERO.test(reserveDay);
-const isEmpty = (reserveDay) => REGEX.EMPTY.test(reserveDay);
+const isEmptyorWhiteSpace = (reserveDay) =>
+  REGEX.EMPTY.test(reserveDay) || REGEX.WHITE_SPACE.test(reserveDay);
 
 const checkValidDay = (reserveDay) => {
   if (isInvalidDay(reserveDay)) {
@@ -26,7 +27,7 @@ const checkStartWithZero = (reserveDay) => {
   }
 };
 const checkIsEmpty = (reserveDay) => {
-  if (isEmpty(reserveDay)) {
+  if (isEmptyorWhiteSpace(reserveDay)) {
     throw new Error(ERROR.INVALID_DAY);
   }
 };

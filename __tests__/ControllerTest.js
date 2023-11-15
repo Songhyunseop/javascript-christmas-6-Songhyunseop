@@ -54,8 +54,18 @@ describe('잘못된 날짜 입력에 대한 예외처리', () => {
     mockQuestions(['', '바비큐립-1']);
 
     const orderController = new OrderProcess();
-    await expect(orderController.readReservationInput()).rejects.toThrow();
 
+    await expect(orderController.readReservationInput()).rejects.toThrow();
+    expect(logSpy).toHaveBeenCalledWith(ERROR.INVALID_DAY);
+  });
+
+  test('공백을 두고 입력할 경우', async () => {
+    const logSpy = getLogSpy();
+    mockQuestions([' 3', '바비큐립-1']);
+
+    const orderController = new OrderProcess();
+
+    await expect(orderController.readReservationInput()).rejects.toThrow();
     expect(logSpy).toHaveBeenCalledWith(ERROR.INVALID_DAY);
   });
 });
