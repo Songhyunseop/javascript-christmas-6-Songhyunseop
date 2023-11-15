@@ -31,13 +31,13 @@ class Factory {
   }
 
   static checkAllEvent(day, courses) {
-    const eventCreators = [
+    const eventCheckFuncs = [
       () => this.createChristmas(day).checkAvailable(),
       () => this.createEvery(day, courses).checkAvailable(),
       () => this.createSpecial(day).checkAvailable(),
     ];
 
-    return eventCreators;
+    return eventCheckFuncs;
   }
 }
 

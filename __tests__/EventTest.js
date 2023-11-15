@@ -96,6 +96,21 @@ describe('Event 클래스 unit 테스트', () => {
 
       expect(result).toEqual(expect.objectContaining(answer));
     });
+
+    test('이벤트 적용 대상이 아닌 경우', () => {
+      const day = EVENT.NO_BENEFIT_DAY;
+      const orders = {
+        Appetizer: 0,
+        Main: 5,
+        Dessert: 1,
+        Drinks: 0,
+      };
+
+      const event = new EventEvery(day, orders);
+      const result = event.checkAvailable();
+
+      expect(result).toEqual(EVENT.NO_BENEFIT_DAY);
+    });
   });
 
   test('예약날짜가 할인 날짜와 일치할 경우 특별할인 적용', () => {

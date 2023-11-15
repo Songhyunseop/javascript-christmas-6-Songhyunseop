@@ -29,6 +29,7 @@ const parseStringByDash = (string) => {
   return result;
 };
 
+// 입력 날짜의 요일 계산
 const getDayofWeeks = (day) => {
   const dayOfWeek = new Date(`2023-12-${day}`).getDay();
 

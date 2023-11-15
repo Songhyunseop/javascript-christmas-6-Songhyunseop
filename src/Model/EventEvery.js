@@ -35,14 +35,14 @@ class EventEvery extends Event {
     return { name: EVENT.EVERY_WEEKS, benefit };
   }
 
-  #checkEveryBenefit() {
+  #checkEventBenefit() {
     if (this.#isWeeks()) return this.#calculateWeeksBenefit();
 
     return this.#calculateWeekendBenefit();
   }
 
   checkAvailable() {
-    if (this.#isEveryDay()) return this.#checkEveryBenefit();
+    if (this.#isEveryDay()) return this.#checkEventBenefit();
 
     return EVENT.NO_BENEFIT_DAY;
   }
